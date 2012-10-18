@@ -1,0 +1,27 @@
+@(todaysLunches: Seq[(impl.lunchInfo.Restaurant, Seq[impl.lunchInfo.Meal])])
+
+@inHead = {
+<script language="javascript">
+  $(function(){
+    //$("body").append("<div>hehj</div>");
+
+  });
+</script>
+}
+
+@layouts.main(title = "Dagens lunch", inHead = inHead) {
+
+  <h1>Dagens SU-luncher</h1>
+  @for((restaurant, meals) <- todaysLunches) {
+
+    <h4>@restaurant.name</h4>
+
+    <ul>
+    @for(meal <- meals) {
+      <li>@meal.description</li>
+    }
+    </ul>
+
+  }
+
+}
