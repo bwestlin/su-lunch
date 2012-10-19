@@ -14,8 +14,11 @@ import impl.lunchInfo._
 object LunchInfo extends Controller {
 
   def index = Action { request =>
-    val todaysLunches = LunchInfoFetcher.fetchTodaysLunchInfo
-    Ok(views.html.lunchInfo.index(todaysLunches))
+    Ok(views.html.lunchInfo.index())
+  }
+
+  def todaysLunches = Action { request =>
+    Ok(views.html.lunchInfo.todaysLunches(LunchInfoFetcher.fetchTodaysLunchInfo))
   }
 
   def fetchLunchInfo = Action { request =>

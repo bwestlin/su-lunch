@@ -1,0 +1,13 @@
+@(todaysLunches: Seq[(impl.lunchInfo.Restaurant, Seq[impl.lunchInfo.Meal])])
+
+@for((restaurant, meals) <- todaysLunches) {
+
+  <h4>@restaurant.name</h4>
+
+  <ul>
+  @for(meal <- meals) {
+    <li>@meal.description</li>
+  }
+  </ul>
+
+}
