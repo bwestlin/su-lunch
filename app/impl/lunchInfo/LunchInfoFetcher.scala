@@ -74,6 +74,37 @@ object LunchInfoFetcher {
             case e: Exception => null
           }
         }
+      ),
+      (
+        "Kräftan",
+        "http://www.kraftan.nu/",
+        (url: String) => {
+          try {
+            val doc = Jsoup.connect(url).get();
+
+            val dt: DateTime = new DateTime()
+            val weekdays = List("Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag")
+            val weekday = weekdays(dt.dayOfWeek().get() - 1)
+
+            val dayP = doc.select("#about p:contains(" + weekday + ")").first()
+
+
+            def getLunches(p: Element, xs: List[Meal]): List[Meal] = {
+              val text = if (p != null) p.text().trim else null
+              if (text == null || text.length <= 1) xs
+              else if (text == "**")
+                getLunches(p.nextElementSibling(), xs)
+              else {
+                Meal(text) :: getLunches(p.nextElementSibling(), xs)
+              }
+            }
+
+            getLunches(dayP.nextElementSibling(), List())
+          }
+          catch {
+            case e: Exception => null
+          }
+        }
       )
     )
 
