@@ -1,7 +1,13 @@
 
+h4 {
+  margin-top: 20px;
+  color: #03c3dd;
+}
+
 ul.meals {
   list-style: none outside none;
   margin-left: 0;
+  color: #666;
 }
 
 ul.meals > li {
