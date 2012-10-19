@@ -1,13 +1,11 @@
 package controllers
 
 import play.api._
+import cache.Cached
+import play.api.Play.current
+import libs.concurrent.Akka
 import mvc._
 import play.api.libs.json._
-
-import org.jsoup.nodes._
-import org.jsoup.select._
-import org.jsoup._
-import java.net.URL
 
 import impl.lunchInfo._
 
@@ -17,8 +15,13 @@ object LunchInfo extends Controller {
     Ok(views.html.lunchInfo.index())
   }
 
-  def todaysLunches = Action { request =>
-    Ok(views.html.lunchInfo.todaysLunches(LunchInfoFetcher.fetchTodaysLunchInfo))
+  def todaysLunches = Cached("todaysLunches", 60 * 10) {
+    Action { request =>
+      val todaysLunchesPromise = Akka.future { LunchInfoFetcher.fetchTodaysLunchInfo }
+      Async {
+        todaysLunchesPromise.map(todaysLunches => Ok(views.html.lunchInfo.todaysLunches(todaysLunches)))
+      }
+    }
   }
 
   def fetchLunchInfo = Action { request =>
@@ -34,9 +37,6 @@ object LunchInfo extends Controller {
       BadRequest("Expecting Json impl")
     }
     */
-
-    val doc = Jsoup.connect("").get();
-    //doc.
 
     val json = Json.toJson(
       Map("status" -> "OK")
