@@ -6,13 +6,6 @@ import org.jsoup._
 import nodes.Element
 import org.joda.time.DateTime
 
-/**
- * Created with IntelliJ IDEA.
- * User: weez
- * Date: 10/17/12
- * Time: 10:27 PM
- * To change this template use File | Settings | File Templates.
- */
 object LunchInfoFetcher {
 
   def fetchTodaysLunchInfo: Seq[(Restaurant, Seq[Meal])] = {
@@ -21,7 +14,7 @@ object LunchInfoFetcher {
 
     val restaurantsToFetch = List(
       (
-        "Lantis",
+        "Restaurang Lantis",
         "http://www.hors.se/restaurang-lantis",
         (url: String) => {
           try {
@@ -45,7 +38,7 @@ object LunchInfoFetcher {
         }
       ),
       (
-        "Stora skuggan",
+        "Stora Skuggans Wärdshus",
         "http://gastrogate.com/restaurang/storaskuggan/page/3",
         (url: String) => {
           try {
@@ -76,7 +69,7 @@ object LunchInfoFetcher {
         }
       ),
       (
-        "Kräftan",
+        "Värdshuset Kräftan",
         "http://www.kraftan.nu/",
         (url: String) => {
           try {
@@ -111,7 +104,7 @@ object LunchInfoFetcher {
     restaurantsToFetch.map(t => {
       val (name, url, fetcher) = t
       val meals = fetcher(url)
-      if (meals != null) ( Restaurant(name), meals ) else null
+      ( Restaurant(name, url), meals )
     }).filter(elem => elem != null)
   }
 
