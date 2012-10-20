@@ -79,6 +79,6 @@ ul.meals > li:last-child {
 }
 
 ul.meals > li:hover {
-  background-color: #EEEEEE;
+  /*background-color: #EEEEEE;*/
 }
 
