@@ -1,23 +1,23 @@
 body {
-  background-color: #ddd;
-  padding-top: 50px;
+  background-color: #d0d0d0;
 }
 
 #header {
-  position: fixed;
-  top: 0px;
-  left: 0px;
-  height: 45px;
-  width: 100%;
   background-color: #03c3dd;
-  padding-left: 20px;
+  padding: 5px 20px 5px 20px;
   border-bottom: 5px solid #03a0ba;
 }
 
 #header h3 {
   color: white;
   text-shadow: 0 1px 3px rgba(0, 0, 0, .4), 0 0 30px rgba(0, 0, 0, .075);
-  margin-top: 5px;
+  margin: 0px;
+}
+
+#page {
+  background-color: #ddd;
+  padding: 1px 20px 40px 20px;
+  border-bottom: 20px solid #d8d8d8;
 }
 
 h4 {
