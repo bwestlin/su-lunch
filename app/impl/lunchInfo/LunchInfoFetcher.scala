@@ -4,13 +4,16 @@ import collection.JavaConversions._
 
 import org.jsoup._
 import nodes.Element
-import org.joda.time.DateTime
+import org.joda.time.{DateTime, Period}
 
 object LunchInfoFetcher {
 
   def fetchTodaysLunchInfo: Seq[(Restaurant, Seq[Meal])] = {
 
     type RestaurantFetcher = (String) => List[Meal]
+
+    var todayDT: DateTime = new DateTime()
+    //todayDT = todayDT.minus(Period.days(1))
 
     val restaurantsToFetch = List(
       (
@@ -21,16 +24,22 @@ object LunchInfoFetcher {
             val doc = Jsoup.connect(url).get();
 
             val lunchmenulist = doc.select(".lunchmenulist").first()
-            val typMap = Map(
-              ("kott" -> "Kött"),
-              ("fisk" -> "Fisk"),
-              ("veg" -> "Vegetarisk")
-            )
 
-            lunchmenulist.select(".lunchmenulisttext").map(elem => {
-              val typ = elem.parent().className()
-              Meal(typMap(typ) + ": " + elem.text())
-            })
+            val weekdays = List("måndag", "tisdag", "onsdag", "torsdag", "fredag", "lördag", "söndag")
+            val weekday = weekdays(todayDT.dayOfWeek().get() - 1)
+            if (lunchmenulist.select("h2.contains(" + weekday + ")") != null) {
+
+              val typMap = Map(
+                ("kott" -> "Kött"),
+                ("fisk" -> "Fisk"),
+                ("veg" -> "Vegetarisk")
+              )
+
+              lunchmenulist.select(".lunchmenulisttext").map(elem => {
+                val typ = elem.parent().className()
+                Meal(typMap(typ) + ": " + elem.text())
+              })
+            } else null
           }
           catch {
             case e: Exception => null
@@ -44,9 +53,8 @@ object LunchInfoFetcher {
           try {
             val doc = Jsoup.connect(url).get();
 
-            val dt: DateTime = new DateTime()
             val weekdays = List("Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag")
-            val weekday = weekdays(dt.dayOfWeek().get() - 1)
+            val weekday = weekdays(todayDT.dayOfWeek().get() - 1)
 
             val dayTd = doc.select("td:containsOwn(" + weekday + ")").first()
             val next = dayTd.parent().nextElementSibling().nextElementSibling()
@@ -75,9 +83,8 @@ object LunchInfoFetcher {
           try {
             val doc = Jsoup.connect(url).get();
 
-            val dt: DateTime = new DateTime()
             val weekdays = List("Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag")
-            val weekday = weekdays(dt.dayOfWeek().get() - 1)
+            val weekday = weekdays(todayDT.dayOfWeek().get() - 1)
 
             val dayP = doc.select("#about p:contains(" + weekday + ")").first()
 
