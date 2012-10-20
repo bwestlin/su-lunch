@@ -2,12 +2,14 @@
 
 @for((restaurant, meals) <- todaysLunches) {
 
-  <h4>@restaurant.name</h4>
+  <h4><a href="@restaurant.url">@restaurant.name</a></h4>
 
-  <ul class="meals">
-  @for(meal <- meals) {
-    <li>@meal.description</li>
+  @if(meals != null) {
+    <ul class="meals">
+    @for(meal <- meals) {
+      <li>@meal.description</li>
+    }
+    </ul>
   }
-  </ul>
 
 }

@@ -3,14 +3,19 @@
 @inHead = {
 <script language="javascript">
   $(function(){
-    $("#todaysLunches").load("@routes.LunchInfo.todaysLunches()");
+    $("#todaysLunches").load("@routes.LunchInfo.todaysLunches()", function(response, status, xhr) {
+      if (status == "error") {
+        var msg = "Tyvärr uppstod ett fel: ";
+        $("#todaysLunches").html("<div class=\"alert alert-error\"><b>Fel!</b> " + msg + xhr.status + " " + xhr.statusText + "</div>");
+      }
+    });
   });
 </script>
 }
 
 @layouts.main(title = "Dagens lunch", inHead = inHead) {
 
-  <h1>Dagens SU-luncher</h1>
+  <h1>Dagens luncher för Stockholms Universitet</h1>
 
   <div id="todaysLunches">
     Hämtar dagens luncher...
