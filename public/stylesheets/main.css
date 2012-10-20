@@ -1,13 +1,46 @@
+body {
+  background-color: #ddd;
+  padding-top: 50px;
+}
+
+#header {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  height: 45px;
+  width: 100%;
+  background-color: #03c3dd;
+  padding-left: 20px;
+  border-bottom: 5px solid #03a0ba;
+}
+
+#header h3 {
+  color: white;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, .4), 0 0 30px rgba(0, 0, 0, .075);
+  margin-top: 5px;
+}
 
 h4 {
   margin-top: 20px;
   color: #03c3dd;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 1), 0 0 30px rgba(255, 255, 255, 1);
+}
+h4 a {
+  color: #03c3dd;
+}
+
+#todaysLunches .loading {
+  margin-top: 20px;
 }
 
 ul.meals {
   list-style: none outside none;
   margin-left: 0;
-  color: #666;
+  color: #444;
+}
+
+.progress-striped .bar {
+  background-color: #03c3dd;
 }
 
 ul.meals > li {
@@ -18,12 +51,14 @@ ul.meals > li {
   padding-bottom: 8px;
   padding-top: 8px;
   margin-right: 0;
-  margin-bottom: -1px;
-  border: 1px solid #DDD;
+  margin-bottom: -2px;
+  border: 2px solid #03c3dd;
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
   cursor: default;
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .4), 0 0 30px rgba(0, 0, 0, .075);
 }
 
 ul.meals > li:first-child {

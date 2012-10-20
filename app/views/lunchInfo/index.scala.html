@@ -30,12 +30,16 @@
 
 @layouts.main(title = "Dagens lunch", inHead = inHead) {
 
-  <h1>Dagens luncher kring Stockholms Universitet</h1>
+  <div id="header">
+    <h3>Dagens luncher - Stockholms Universitet</h3>
+  </div>
 
   <div id="todaysLunches" style="display: none; opacity: 0;">
-    Hämtar dagens luncher...
-    <div class="progress progress-striped active" style="max-width: 350px;">
-      <div class="bar" style="width: 100%;"></div>
+    <div class="loading">
+      Hämtar dagens luncher...
+      <div class="progress progress-striped active" style="max-widthx: 350px;">
+        <div class="bar" style="width: 100%;"></div>
+      </div>
     </div>
   </div>
 
