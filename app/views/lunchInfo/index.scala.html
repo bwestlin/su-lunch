@@ -3,21 +3,36 @@
 @inHead = {
 <script language="javascript">
   $(function(){
+
+    var todaysLunchesShown = false;
+    function showTodaysLunches() {
+      if (!todaysLunchesShown) {
+        $("#todaysLunches").show().transition({ opacity: 1 }, "slow");
+        todaysLunchesShown = true;
+      }
+    }
+
     $("#todaysLunches").load("@routes.LunchInfo.todaysLunches()", function(response, status, xhr) {
+      var $todaysLunches = $("#todaysLunches");
+      showTodaysLunches();
       if (status == "error") {
         var msg = "Tyvärr uppstod ett fel: ";
-        $("#todaysLunches").html("<div class=\"alert alert-error\"><b>Fel!</b> " + msg + xhr.status + " " + xhr.statusText + "</div>");
+        $todaysLunches.html("<div class=\"alert alert-error\"><b>Fel!</b> " + msg + xhr.status + " " + xhr.statusText + "</div>");
       }
     });
+
+    setTimeout(function() {
+      showTodaysLunches();
+    }, 250);
   });
 </script>
 }
 
 @layouts.main(title = "Dagens lunch", inHead = inHead) {
 
-  <h1>Dagens luncher för Stockholms Universitet</h1>
+  <h1>Dagens luncher kring Stockholms Universitet</h1>
 
-  <div id="todaysLunches">
+  <div id="todaysLunches" style="display: none; opacity: 0;">
     Hämtar dagens luncher...
     <div class="progress progress-striped active" style="max-width: 350px;">
       <div class="bar" style="width: 100%;"></div>
