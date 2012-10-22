@@ -1,17 +1,25 @@
-@(todaysLunches: Seq[(impl.lunchInfo.Restaurant, Seq[impl.lunchInfo.Meal])])
+@(todaysLunches: Seq[(impl.lunchInfo.Restaurant, Any)])
 
 @for((restaurant, meals) <- todaysLunches) {
 
   <h4><a href="@restaurant.url">@restaurant.name</a></h4>
 
-  @if(meals != null) {
-    <ul class="meals">
-    @for(meal <- meals) {
-      <li>@meal.description</li>
+  @meals match {
+    case meals: Seq[Meal] => {
+
+      <ul class="meals">
+        @for(meal <- meals) {
+        <li>@meal.description</li>
+        }
+      </ul>
+
     }
-    </ul>
-  } else {
-    <div class="">Inga luncher funna.</div>
+    case e: Exception => {
+      <div class="alert alert-error"><b>Fel uppstod vid hämtning av lunchinformation!</b><br />@e</div>
+    }
+    case _ => {
+      <div class="">Inga luncher funna.</div>
+    }
   }
 
 }
