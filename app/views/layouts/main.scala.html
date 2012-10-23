@@ -28,12 +28,18 @@
     @inHead
   </head>
   <body>
-    <div id="header">
-      <h3>@title</h3>
-    </div>
+    <div id="main">
+      <div id="header">
+        <div class="centered">
+          <h3>@title</h3>
+        </div>
+      </div>
 
-    <div id="page">
-      @content
+      <div id="page">
+        <div class="centered">
+          @content
+        </div>
+      </div>
     </div>
   </body>
 </html>

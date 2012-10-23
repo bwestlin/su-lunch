@@ -20,6 +20,7 @@ body {
   background-color: #ddd;
   padding: 1px 20px 40px 20px;
   border-bottom: 20px solid #d8d8d8;
+  margin-bottom: 50px;
 }
 
 h4 {
@@ -88,3 +89,9 @@ ul.meals > li:hover {
   /*background-color: #EEEEEE;*/
 }
 
+@media (min-width: 860px) {
+  .centered {
+    width: 860px;
+    margin: auto;
+  }
+}
