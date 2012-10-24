@@ -1,4 +1,5 @@
 @(title: String, inHead: Html = Html(""))(content: Html)
+@import org.joda.time.DateTime
 <!DOCTYPE html>
 
 <html>
@@ -40,6 +41,13 @@
           @content
         </div>
       </div>
+
+      <div id="footer">
+        <div class="centered">
+        &copy; @((new DateTime()).year().get()) bwestlin
+        </div>
+      </div>
+
     </div>
   </body>
 </html>
