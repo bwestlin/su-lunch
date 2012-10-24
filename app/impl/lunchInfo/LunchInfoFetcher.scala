@@ -8,7 +8,7 @@ import org.joda.time.{DateTime, Period}
 
 object LunchInfoFetcher {
 
-  def fetchTodaysLunchInfo: Seq[(Restaurant, Any)] = {
+  def fetchTodaysLunchInfo: Seq[(Restaurant, Object)] = {
 
     type RestaurantFetcher = (String) => List[Meal]
 
@@ -117,11 +117,11 @@ object LunchInfoFetcher {
       )
     )
 
-    restaurantsToFetch.map(t => {
+    restaurantsToFetch.par.map(t => {
       val (name, url, fetcher) = t
       val meals = fetcher(url)
       ( Restaurant(name, url), meals )
-    }).filter(elem => elem != null)
+    }).seq
   }
 
 }
