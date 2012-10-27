@@ -27,7 +27,7 @@ object LunchInfoFetcher {
 
             val weekdays = List("måndag", "tisdag", "onsdag", "torsdag", "fredag", "lördag", "söndag")
             val weekday = weekdays(todayDT.dayOfWeek().get() - 1)
-            if (lunchmenulist.select("h2:containsOwn(" + weekday + ")") != null) {
+            if (lunchmenulist.select("h2:containsOwn(" + weekday + ")").first() != null) {
 
               val typMap = Map(
                 ("kott" -> "Kött"),
@@ -60,19 +60,21 @@ object LunchInfoFetcher {
             val weekday = weekdays(todayDT.dayOfWeek().get() - 1)
 
             val dayTd = doc.select("td:containsOwn(" + weekday + ")").first()
-            val next = dayTd.parent().nextElementSibling().nextElementSibling()
+            if (dayTd != null) {
+              val next = dayTd.parent().nextElementSibling().nextElementSibling()
 
-            def getRows(row: Element, xs: List[Meal]): List[Meal] = {
-              val tds = if (row != null) row.select("td") else null
-              val firstTd = if (tds != null) tds.first() else null
+              def getRows(row: Element, xs: List[Meal]): List[Meal] = {
+                val tds = if (row != null) row.select("td") else null
+                val firstTd = if (tds != null) tds.first() else null
 
-              if (firstTd == null || firstTd.className() == "rubriksmaller") xs
-              else {
-                Meal(row.text()) :: getRows(row.nextElementSibling(), xs)
+                if (firstTd == null || firstTd.className() == "rubriksmaller") xs
+                else {
+                  Meal(row.text()) :: getRows(row.nextElementSibling(), xs)
+                }
               }
-            }
 
-            getRows(next, List())
+              getRows(next, List())
+            } else null
           }
           catch {
             case e: Exception => {
@@ -93,19 +95,20 @@ object LunchInfoFetcher {
             val weekday = weekdays(todayDT.dayOfWeek().get() - 1)
 
             val dayP = doc.select("#about p:contains(" + weekday + ")").first()
+            if (dayP != null) {
 
-
-            def getLunches(p: Element, xs: List[Meal]): List[Meal] = {
-              val text = if (p != null) p.text().trim else null
-              if (text == null || text.length <= 1) xs
-              else if (text == "**")
-                getLunches(p.nextElementSibling(), xs)
-              else {
-                Meal(text) :: getLunches(p.nextElementSibling(), xs)
+              def getLunches(p: Element, xs: List[Meal]): List[Meal] = {
+                val text = if (p != null) p.text().trim else null
+                if (text == null || text.length <= 1) xs
+                else if (text == "**")
+                  getLunches(p.nextElementSibling(), xs)
+                else {
+                  Meal(text) :: getLunches(p.nextElementSibling(), xs)
+                }
               }
-            }
 
-            getLunches(dayP.nextElementSibling(), List())
+              getLunches(dayP.nextElementSibling(), List())
+            } else null
           }
           catch {
             case e: Exception => {
