@@ -4,8 +4,10 @@ body {
 
 #header {
   background-color: #03c3dd;
-  padding: 8px 20px 8px 20px;
   border-bottom: 5px solid #03a0ba;
+}
+#header .centered {
+  padding: 8px 20px 8px 20px;
 }
 
 #header h3 {
@@ -18,8 +20,10 @@ body {
 
 #page {
   background-color: #ddd;
-  padding: 1px 20px 40px 20px;
   border-bottom: 20px solid #d8d8d8;
+}
+#page .centered {
+  padding: 1px 20px 40px 20px;
 }
 
 #footer {
@@ -28,6 +32,9 @@ body {
   text-shadow: 1px 1px 0px rgba(255, 255, 255, .6), 0 0 6px rgba(255, 255, 255, 1);
   text-align: right;
   margin-bottom: 50px;
+}
+#footer .centered {
+  padding: 8px 20px 8px 20px;
 }
 
 h4 {
@@ -98,7 +105,7 @@ ul.meals > li:hover {
 
 @media (min-width: 860px) {
   .centered {
-    width: 860px;
+    width: 820px;
     margin: auto;
   }
 }
