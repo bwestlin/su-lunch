@@ -23,11 +23,11 @@ object LunchInfoFetcher {
           try {
             val doc = Jsoup.connect(url).timeout(10*1000).get()
 
-            val lunchmenulist = doc.select(".lunchmenulist").first()
+            val lunchmenulist = doc.select(".lunchmenulist").first
 
             val weekdays = List("måndag", "tisdag", "onsdag", "torsdag", "fredag", "lördag", "söndag")
-            val weekday = weekdays(todayDT.dayOfWeek().get() - 1)
-            if (lunchmenulist.select("h2:containsOwn(" + weekday + ")").first() != null) {
+            val weekday = weekdays(todayDT.dayOfWeek.get - 1)
+            if (lunchmenulist.select("h2:containsOwn(" + weekday + ")").first != null) {
 
               val typMap = Map(
                 ("kott" -> "Kött"),
@@ -36,8 +36,8 @@ object LunchInfoFetcher {
               )
 
               lunchmenulist.select(".lunchmenulisttext").map(elem => {
-                val typ = elem.parent().className()
-                Meal(typMap(typ) + ": " + elem.text())
+                val typ = elem.parent.className
+                Meal(typMap(typ) + ": " + elem.text)
               })
             } else null
           }
@@ -57,19 +57,19 @@ object LunchInfoFetcher {
             val doc = Jsoup.connect(url).timeout(10*1000).get()
 
             val weekdays = List("Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag")
-            val weekday = weekdays(todayDT.dayOfWeek().get() - 1)
+            val weekday = weekdays(todayDT.dayOfWeek.get - 1)
 
-            val dayTd = doc.select("td:containsOwn(" + weekday + ")").first()
+            val dayTd = doc.select("td:containsOwn(" + weekday + ")").first
             if (dayTd != null) {
-              val next = dayTd.parent().nextElementSibling().nextElementSibling()
+              val next = dayTd.parent.nextElementSibling.nextElementSibling
 
               def getRows(row: Element, xs: List[Meal]): List[Meal] = {
                 val tds = if (row != null) row.select("td") else null
-                val firstTd = if (tds != null) tds.first() else null
+                val firstTd = if (tds != null) tds.first else null
 
-                if (firstTd == null || firstTd.className() == "rubriksmaller") xs
+                if (firstTd == null || firstTd.className == "rubriksmaller") xs
                 else {
-                  Meal(row.text()) :: getRows(row.nextElementSibling(), xs)
+                  Meal(row.text) :: getRows(row.nextElementSibling, xs)
                 }
               }
 
@@ -92,22 +92,22 @@ object LunchInfoFetcher {
             val doc = Jsoup.connect(url).timeout(10*1000).get()
 
             val weekdays = List("Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag")
-            val weekday = weekdays(todayDT.dayOfWeek().get() - 1)
+            val weekday = weekdays(todayDT.dayOfWeek.get - 1)
 
-            val dayP = doc.select("#about p:contains(" + weekday + ")").first()
+            val dayP = doc.select("#about p:contains(" + weekday + ")").first
             if (dayP != null) {
 
               def getLunches(p: Element, xs: List[Meal]): List[Meal] = {
-                val text = if (p != null) p.text().trim else null
+                val text = if (p != null) p.text.trim else null
                 if (text == null || text.length <= 1) xs
                 else if (text == "**")
-                  getLunches(p.nextElementSibling(), xs)
+                  getLunches(p.nextElementSibling, xs)
                 else {
-                  Meal(text) :: getLunches(p.nextElementSibling(), xs)
+                  Meal(text) :: getLunches(p.nextElementSibling, xs)
                 }
               }
 
-              getLunches(dayP.nextElementSibling(), List())
+              getLunches(dayP.nextElementSibling, List())
             } else null
           }
           catch {
