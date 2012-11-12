@@ -21,7 +21,7 @@ object LunchInfoFetcher {
         "http://www.hors.se/restaurang-lantis",
         (url: String) => {
           try {
-            val doc = Jsoup.connect(url).get();
+            val doc = Jsoup.connect(url).timeout(10*1000).get()
 
             val lunchmenulist = doc.select(".lunchmenulist").first()
 
@@ -54,7 +54,7 @@ object LunchInfoFetcher {
         "http://gastrogate.com/restaurang/storaskuggan/page/3",
         (url: String) => {
           try {
-            val doc = Jsoup.connect(url).get();
+            val doc = Jsoup.connect(url).timeout(10*1000).get()
 
             val weekdays = List("Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag")
             val weekday = weekdays(todayDT.dayOfWeek().get() - 1)
@@ -89,7 +89,7 @@ object LunchInfoFetcher {
         "http://www.kraftan.nu/",
         (url: String) => {
           try {
-            val doc = Jsoup.connect(url).get();
+            val doc = Jsoup.connect(url).timeout(10*1000).get()
 
             val weekdays = List("Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag")
             val weekday = weekdays(todayDT.dayOfWeek().get() - 1)
