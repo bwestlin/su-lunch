@@ -97,17 +97,17 @@ object LunchInfoFetcher {
             val dayP = doc.select("#about p:contains(" + weekday + ")").first
             if (dayP != null) {
 
-              def getLunches(p: Element, xs: List[Meal]): List[Meal] = {
+              def getLunches(p: Element): List[Meal] = {
                 val text = if (p != null) p.text.trim else null
-                if (text == null || text.length <= 1) xs
+                if (text == null || text.length <= 1) List()
                 else if (text == "**")
-                  getLunches(p.nextElementSibling, xs)
+                  getLunches(p.nextElementSibling)
                 else {
-                  Meal(text) :: getLunches(p.nextElementSibling, xs)
+                  Meal(text) :: getLunches(p.nextElementSibling)
                 }
               }
 
-              getLunches(dayP.nextElementSibling, List())
+              getLunches(dayP.nextElementSibling)
             } else null
           }
           catch {
