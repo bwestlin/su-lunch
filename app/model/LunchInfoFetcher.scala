@@ -120,10 +120,11 @@ object LunchInfoFetcher {
       )
     )
 
-    restaurantsToFetch.par.map(t => {
-      val (name, url, fetcher) = t
-      val meals = fetcher(url)
-      ( Restaurant(name, url), meals )
+    // Fetch lunches from each restaurant in parallel
+    restaurantsToFetch.par.map({
+      case (name, url, fetcher) => {
+        (Restaurant(name, url), fetcher(url))
+      }
     }).seq
   }
 
