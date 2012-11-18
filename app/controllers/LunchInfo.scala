@@ -5,7 +5,6 @@ import cache.Cached
 import play.api.Play.current
 import libs.concurrent.Akka
 import mvc._
-import play.api.libs.json._
 
 import impl.lunchInfo._
 
@@ -24,35 +23,5 @@ object LunchInfo extends Controller {
         )
       }
     }
-  }
-
-  def fetchLunchInfo = Action { request =>
-
-    /*
-    request.body.asJson.map { json =>
-      (json \ "name").asOpt[String].map { name =>
-        Ok("Hello " + name)
-      }.getOrElse {
-        BadRequest("Missing parameter [name]")
-      }
-    }.getOrElse {
-      BadRequest("Expecting Json impl")
-    }
-    */
-
-    val json = Json.toJson(
-      Map("status" -> "OK")
-    )
-
-    Ok(json)
-
-  }
-
-  def fetchLunchInfoExample = Action { request =>
-    val json = Json.toJson(
-      Map("status" -> "OK")
-    )
-
-    Ok(json)
   }
 }
