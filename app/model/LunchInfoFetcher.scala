@@ -1,4 +1,4 @@
-package impl.lunchInfo
+package model
 
 import collection.JavaConversions._
 

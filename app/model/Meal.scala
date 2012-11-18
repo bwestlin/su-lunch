@@ -1,4 +1,4 @@
-package impl.lunchInfo
+package model
 
 case class Meal(description: String) {
 }

@@ -6,7 +6,7 @@ import play.api.Play.current
 import libs.concurrent.Akka
 import mvc._
 
-import impl.lunchInfo._
+import model.LunchInfoFetcher
 
 object LunchInfo extends Controller {
 
