@@ -8,18 +8,18 @@ import org.joda.time.{DateTime, Period}
 
 object LunchInfoFetcher {
 
-  def fetchTodaysLunchInfo: Seq[(Restaurant, Object)] = {
+  def fetchTodaysLunchInfo: Seq[(Restaurant, Any)] = {
 
-    type RestaurantFetcher = (String) => List[Meal]
+    type RestaurantFetcher = (String) => Any
 
     var todayDT: DateTime = new DateTime()
     //todayDT = todayDT.minus(Period.days(1))
 
-    val restaurantsToFetch = List(
+    val restaurantsToFetch: List[(String, String, RestaurantFetcher)] = List(
       (
         "Restaurang Lantis",
         "http://www.hors.se/restaurang-lantis",
-        (url: String) => {
+        url => {
           try {
             val doc = Jsoup.connect(url).timeout(10*1000).get()
 
@@ -52,7 +52,7 @@ object LunchInfoFetcher {
       (
         "Stora Skuggans Wärdshus",
         "http://gastrogate.com/restaurang/storaskuggan/page/3",
-        (url: String) => {
+        url => {
           try {
             val doc = Jsoup.connect(url).timeout(10*1000).get()
 
@@ -87,7 +87,7 @@ object LunchInfoFetcher {
       (
         "Värdshuset Kräftan",
         "http://www.kraftan.nu/",
-        (url: String) => {
+        url => {
           try {
             val doc = Jsoup.connect(url).timeout(10*1000).get()
 

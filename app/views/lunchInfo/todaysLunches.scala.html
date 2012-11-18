@@ -1,4 +1,4 @@
-@(todaysLunches: Seq[(model.Restaurant, Object)])
+@(todaysLunches: Seq[(model.Restaurant, Any)])
 @import model._
 
 @for((restaurant, meals) <- todaysLunches) {
