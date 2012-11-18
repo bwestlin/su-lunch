@@ -19,7 +19,9 @@ object LunchInfo extends Controller {
     Action { request =>
       val todaysLunchesPromise = Akka.future { LunchInfoFetcher.fetchTodaysLunchInfo }
       Async {
-        todaysLunchesPromise.map(todaysLunches => Ok(views.html.lunchInfo.todaysLunches(todaysLunches)))
+        todaysLunchesPromise.map(todaysLunches =>
+          Ok(views.html.lunchInfo.todaysLunches(todaysLunches)).withHeaders(PRAGMA -> "no-cache")
+        )
       }
     }
   }
