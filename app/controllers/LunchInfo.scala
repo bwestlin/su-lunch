@@ -15,7 +15,7 @@ object LunchInfo extends Controller {
       case Some(ip: String) => ip
       case None => request.remoteAddress
     }
-    println("Index requested from ip-address: " + ipAddress)
+    println("Index requested from ip-address: " + ipAddress + ", request.remoteAddress=" + request.remoteAddress)
 
     Ok(views.html.lunchInfo.index())
   }
