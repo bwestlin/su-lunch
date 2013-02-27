@@ -2,9 +2,9 @@ package controllers
 
 import play.api._
 import cache.Cached
-import play.api.Play.current
-import libs.concurrent.Akka
 import mvc._
+import play.api.libs.concurrent.Execution.Implicits._
+import play.api.Play.current
 
 import model.LunchInfoFetcher
 
@@ -22,9 +22,9 @@ object LunchInfo extends Controller {
 
   def todaysLunches = Cached("todaysLunches", 60 * 10) {
     Action { request =>
-      val todaysLunchesPromise = Akka.future { LunchInfoFetcher.fetchTodaysLunchInfo }
+      val todaysLunchesFuture = scala.concurrent.Future { LunchInfoFetcher.fetchTodaysLunchInfo }
       Async {
-        todaysLunchesPromise.map(todaysLunches =>
+        todaysLunchesFuture.map(todaysLunches =>
           Ok(views.html.lunchInfo.todaysLunches(todaysLunches)).withHeaders(PRAGMA -> "no-cache")
         )
       }
