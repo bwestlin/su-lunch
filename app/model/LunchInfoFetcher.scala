@@ -56,18 +56,21 @@ object LunchInfoFetcher {
           try {
             val doc = Jsoup.connect(url).timeout(10*1000).ignoreHttpErrors(true).get()
 
-            val weekdays = List("måndag", "tisdag", "onsdag", "torsdag", "fredag", "lördag", "söndag")
+            val weekdays = List("Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag")
             val weekday = weekdays(todayDT.dayOfWeek.get - 1)
 
-            val dayTd = doc.select("div.restcontent").select("td:contains(" + weekday + ")").first
+            //val dayTd = doc.select("div.restcontent").select("td:contains(" + weekday + ")").first
+            val dayTd = doc.select("td:containsOwn(" + weekday + ")").first
             if (dayTd != null) {
-              val next = dayTd.parent.nextElementSibling
+              //val next = dayTd.parent.nextElementSibling
+              val next = dayTd.parent.nextElementSibling.nextElementSibling
 
               def getRows(row: Element): List[Meal] = {
                 val tds = if (row != null) row.select("td") else null
                 val firstTd = if (tds != null) tds.first else null
 
-                if (firstTd == null || firstTd.attr("colspan") == "3") List()
+                //if (firstTd == null || firstTd.attr("colspan") == "3") List()
+                if (firstTd == null || firstTd.className == "rubriksmaller") List()
                 else {
                   Meal(row.text) :: getRows(row.nextElementSibling)
                 }
