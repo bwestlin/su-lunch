@@ -1,4 +1,4 @@
-@(todaysLunches: Seq[(model.Restaurant, Any)])
+@(todaysLunches: Seq[(model.Restaurant, Try[Seq[model.Meal]])])
 @import model._
 
 @for((restaurant, meals) <- todaysLunches) {
@@ -6,7 +6,7 @@
   <h4 style="padding-left: 8px;"><a href="@restaurant.url"><i class="icon-home"></i> @restaurant.name</a></h4>
 
   @meals match {
-    case meals: Seq[Meal] => {
+    case Success(meals: Seq[Meal]) => {
 
       <ul class="meals">
         @for(meal <- meals) {
@@ -15,11 +15,11 @@
       </ul>
 
     }
-    case e: Exception => {
-      <div class="alert alert-error"><b>Fel uppstod vid hämtning av lunchinformation!</b><br />@e</div>
+    case Success(_) => {
+        <div class="">Inga luncher funna.</div>
     }
-    case _ => {
-      <div class="">Inga luncher funna.</div>
+    case Failure(e) => {
+      <div class="alert alert-error"><b>Fel uppstod vid hämtning av lunchinformation!</b><br />@e</div>
     }
   }
 

@@ -17,6 +17,7 @@ object ApplicationBuild extends Build {
       // Add your own project settings here      
 
       //templatesImport ++= Seq("impl.lunchInfo._")
+      templatesImport ++= Seq("scala.util._")
     )
 
 }
