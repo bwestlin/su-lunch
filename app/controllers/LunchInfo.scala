@@ -22,7 +22,7 @@ object LunchInfo extends Controller {
 
   def todaysLunches = Cached("todaysLunches", 60 * 10) {
     Action { request =>
-      val todaysLunchesFuture = scala.concurrent.Future { LunchInfoFetcher.fetchTodaysLunchInfo }
+      val todaysLunchesFuture = LunchInfoFetcher.fetchTodaysLunchInfo
       Async {
         todaysLunchesFuture.map(todaysLunches =>
           Ok(views.html.lunchInfo.todaysLunches(todaysLunches)).withHeaders(PRAGMA -> "no-cache")

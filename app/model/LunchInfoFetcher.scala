@@ -6,10 +6,12 @@ import org.jsoup._
 import nodes.Element
 import org.joda.time.{DateTime, Period}
 import scala.util.Try
+import scala.concurrent.Future
+import play.api.libs.concurrent.Execution.Implicits._
 
 object LunchInfoFetcher {
 
-  def fetchTodaysLunchInfo: Seq[(Restaurant, Try[Seq[Meal]])] = {
+  def fetchTodaysLunchInfo: Future[Seq[(Restaurant, Try[Seq[Meal]])]] = {
 
     type RestaurantFetcher = (String) => Seq[Meal]
 
@@ -82,7 +84,7 @@ object LunchInfoFetcher {
           val weekday = weekdays(todayDT.dayOfWeek.get - 1)
 
           val dayP = doc.select("#about p:contains(" + weekday + ")").first
-          if (dayP != null && false) {
+          if (dayP != null) {
 
             def getLunches(p: Element): List[Meal] = {
               val text = if (p != null) p.text.trim else null
@@ -101,11 +103,13 @@ object LunchInfoFetcher {
     )
 
     // Fetch lunches from each restaurant in parallel
-    restaurantsToFetch.par.map({
-      case (name, url, fetcher) => {
+    val futureLunchInfos = restaurantsToFetch.map({
+      case (name, url, fetcher) => Future {
         (Restaurant(name, url), Try(fetcher(url)))
       }
-    }).seq
+    })
+
+    Future.sequence(futureLunchInfos)
   }
 
 }

@@ -1,4 +1,5 @@
 @(todaysLunches: Seq[(model.Restaurant, Try[Seq[model.Meal]])])
+@import scala.util._
 @import model._
 
 @for((restaurant, meals) <- todaysLunches) {
@@ -13,13 +14,12 @@
         <li>@meal.description</li>
         }
       </ul>
-
     }
     case Success(_) => {
-        <div class="">Inga luncher funna.</div>
+      <div class="">Inga luncher funna.</div>
     }
-    case Failure(e) => {
-      <div class="alert alert-error"><b>Fel uppstod vid hämtning av lunchinformation!</b><br />@e</div>
+    case Failure(error) => {
+      <div class="alert alert-error"><b>Fel uppstod vid hämtning av lunchinformation!</b><br />@error</div>
     }
   }
 
