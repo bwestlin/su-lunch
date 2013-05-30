@@ -103,11 +103,11 @@ object LunchInfoFetcher {
     )
 
     // Fetch lunches from each restaurant in parallel
-    val futureLunchInfos = restaurantsToFetch.map({
+    val futureLunchInfos = restaurantsToFetch.map {
       case (name, url, fetcher) => Future {
         (Restaurant(name, url), Try(fetcher(url)))
       }
-    })
+    }
 
     Future.sequence(futureLunchInfos)
   }

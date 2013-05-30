@@ -20,7 +20,7 @@ object LunchInfo extends Controller {
     Ok(views.html.lunchInfo.index())
   }
 
-  def todaysLunches = Cached("todaysLunches", 60 * 10) {
+  def todaysLunches = Cached("todaysLunches", 60 * 10) { // Cache for 10 minutes
     Action { request =>
       val todaysLunchesFuture = LunchInfoFetcher.fetchTodaysLunchInfo
       Async {

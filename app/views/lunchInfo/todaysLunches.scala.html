@@ -4,7 +4,7 @@
 
 @for((restaurant, meals) <- todaysLunches) {
 
-  <h4 style="padding-left: 8px;"><a href="@restaurant.url"><i class="icon-home"></i> @restaurant.name</a></h4>
+  <h4><a href="@restaurant.url"><i class="icon-home"></i> @restaurant.name</a></h4>
 
   @meals match {
     case Success(meals: Seq[Meal]) => {
