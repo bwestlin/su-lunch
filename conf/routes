@@ -8,3 +8,6 @@ GET     /todaysLunches              controllers.LunchInfo.todaysLunches
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
+
+# WebJars assets
+GET     /webjars/*file                    controllers.WebJarAssets.at(file)
