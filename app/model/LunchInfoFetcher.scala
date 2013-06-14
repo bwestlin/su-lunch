@@ -64,7 +64,11 @@ object LunchInfoFetcher {
         "Stora Skuggans Wärdshus",
         "http://gastrogate.com/restaurang/storaskuggan/page/3",
         url => {
-          val doc = Jsoup.connect(url).timeout(10*1000).ignoreHttpErrors(true).get()
+          val doc = Jsoup.connect(url)
+                         .timeout(10*1000)
+                         .ignoreHttpErrors(true)
+                         .header("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.22 (KHTML, like Gecko) Ubuntu Chromium/25.0.1364.160 Chrome/25.0.1364.160 Safari/537.22")
+                         .get()
 
           val weekdays = List("Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag")
           val weekday = weekdays(todayDT.dayOfWeek.get - 1)
