@@ -64,6 +64,48 @@ object LunchInfoFetcher {
         }
       ),
       (
+        "Restaurang Fossilen",
+        "http://nrm.se/besokmuseet/restaurangfossilen",
+        { url =>
+          val doc = Jsoup.connect(url)
+            .timeout(10 * 1000)
+            .get()
+
+          val weekStartDate = todayDT.withDayOfWeek(1)
+          val months = List("januari", "februari", "mars", "april", "maj", "juni", "juli", "augusti", "september", "oktober", "november", "december")
+          val weekStartMonth = months(weekStartDate.monthOfYear.get - 1)
+
+          val weekdays = List("Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag")
+          val weekday = weekdays(todayDT.dayOfWeek.get - 1)
+
+          val baseElement = doc.select(".sv-text-portlet-content")
+
+          // Check that the webpage consist of the right week according to today
+          val correctWeek = Option(baseElement.select("h2").first).map { headerElem =>
+            headerElem.text.split(Array(',', '-', ' ')).map(_.trim).toList match {
+              case _ :: _ :: _ :: _ :: weekStartDay :: _ :: month :: Nil
+                if weekStartDay.toInt == weekStartDate.dayOfMonth.get && month == weekStartMonth => true
+              case _ => false
+            }
+          }
+
+          val dayH3 = baseElement.select("h3:containsOwn(" + weekday + ")").first
+
+          if (correctWeek.getOrElse(false) && dayH3 != null) {
+            val next = dayH3.nextElementSibling
+
+            def getMeals(nextElem: Element): List[Meal] = {
+              if (nextElem == null || nextElem.tagName != "p") List()
+              else {
+                Meal(nextElem.text) :: getMeals(nextElem.nextElementSibling)
+              }
+            }
+            getMeals(next)
+          }
+          else null
+        }
+      ),
+      (
         "Stora Skuggans Wärdshus",
         "http://gastrogate.com/restaurang/storaskuggan/page/3",
         { url =>
@@ -94,7 +136,8 @@ object LunchInfoFetcher {
             }
 
             getRows(next)
-          } else null
+          }
+          else null
         }
       ),
       (
@@ -122,7 +165,8 @@ object LunchInfoFetcher {
             }
 
             getLunches(dayP.nextElementSibling)
-          } else null
+          }
+          else null
         }
       )
     )
