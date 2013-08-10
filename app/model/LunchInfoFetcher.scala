@@ -48,7 +48,7 @@ object LunchInfoFetcher {
 
           val weekdays = List("måndag", "tisdag", "onsdag", "torsdag", "fredag", "lördag", "söndag")
           val weekday = weekdays(todayDT.dayOfWeek.get - 1)
-          if (lunchmenulist.select("h2:containsOwn(" + weekday + ")").first != null) {
+          if (lunchmenulist != null && lunchmenulist.select("h2:containsOwn(" + weekday + ")").first != null) {
 
             val typMap = Map(
               "kott" -> "Kött",
