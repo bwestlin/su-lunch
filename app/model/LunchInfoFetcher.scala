@@ -21,8 +21,9 @@ import collection.JavaConversions._
 import org.jsoup._
 import nodes.Element
 import org.joda.time.{DateTime, Period}
-import scala.util.Try
+import scala.util.{Failure, Try}
 import scala.concurrent.Future
+import play.api.Logger
 import play.api.libs.concurrent.Execution.Implicits._
 
 object LunchInfoFetcher {
@@ -38,8 +39,10 @@ object LunchInfoFetcher {
       (
         "Restaurang Lantis",
         "http://www.hors.se/restaurang-lantis",
-        url => {
-          val doc = Jsoup.connect(url).timeout(10*1000).get()
+        { url =>
+          val doc = Jsoup.connect(url)
+                         .timeout(10 * 1000)
+                         .get()
 
           val lunchmenulist = doc.select(".lunchmenulist").first
 
@@ -48,24 +51,24 @@ object LunchInfoFetcher {
           if (lunchmenulist.select("h2:containsOwn(" + weekday + ")").first != null) {
 
             val typMap = Map(
-              ("kott" -> "Kött"),
-              ("fisk" -> "Fisk"),
-              ("veg" -> "Vegetarisk")
-            )
+              "kott" -> "Kött",
+              "fisk" -> "Fisk",
+              "veg"  -> "Vegetarisk"
+            ).withDefaultValue("?")
 
-            lunchmenulist.select(".lunchmenulisttext").map(elem => {
+            lunchmenulist.select(".lunchmenulisttext").map { elem =>
               val typ = elem.parent.className
               Meal(typMap(typ) + ": " + elem.text)
-            })
+            }
           } else null
         }
       ),
       (
         "Stora Skuggans Wärdshus",
         "http://gastrogate.com/restaurang/storaskuggan/page/3",
-        url => {
+        { url =>
           val doc = Jsoup.connect(url)
-                         .timeout(10*1000)
+                         .timeout(10 * 1000)
                          .ignoreHttpErrors(true)
                          .header("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.22 (KHTML, like Gecko) Ubuntu Chromium/25.0.1364.160 Chrome/25.0.1364.160 Safari/537.22")
                          .get()
@@ -97,8 +100,10 @@ object LunchInfoFetcher {
       (
         "Värdshuset Kräftan",
         "http://www.kraftan.nu/",
-        url => {
-          val doc = Jsoup.connect(url).timeout(10*1000).get()
+        { url =>
+          val doc = Jsoup.connect(url)
+                         .timeout(10 * 1000)
+                         .get()
 
           val weekdays = List("Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag")
           val weekday = weekdays(todayDT.dayOfWeek.get - 1)
@@ -129,7 +134,18 @@ object LunchInfoFetcher {
       }
     }
 
-    Future.sequence(futureLunchInfos)
+    Future.sequence(futureLunchInfos).map { lunchInfos =>
+
+      // Logging for failing lunchinfo sources
+      for ((resturant, mealsTry) <- lunchInfos) {
+        mealsTry match {
+          case Failure(ex) =>
+            Logger.warn("Lunchinfo fetching for restaurant: " + resturant.name + " failed!", ex)
+          case _ =>
+        }
+      }
+      lunchInfos
+    }
   }
 
 }
