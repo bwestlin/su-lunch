@@ -17,6 +17,11 @@ body {
   font-size: 20px;
   line-height: 24px;
 }
+#header h3 i.icon-food {
+  font-size: 24px;
+  margin-left: 3px;
+  margin-right: 3px;
+}
 
 #page {
   background-color: #ddd;
@@ -61,6 +66,9 @@ ul.meals {
   color: #444;
 }
 
+.progress .bar {
+  width: 100%;
+}
 .progress-striped .bar {
   background-color: #03c3dd;
 }
