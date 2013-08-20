@@ -9,12 +9,12 @@ object ApplicationBuild extends Build {
 
     val appDependencies = Seq(
       // Add your project dependencies here,
-      "org.jsoup" % "jsoup" % "1.7.1",
+      "org.jsoup" % "jsoup" % "1.7.2",
       "joda-time" % "joda-time" % "2.1",
-      "org.webjars" %% "webjars-play" % "2.1.0-2",
-      "org.webjars" % "jquery" % "1.9.1",
-      "org.webjars" % "bootstrap" % "2.1.1",
-      "org.webjars" % "font-awesome" % "3.0.2",
+      "org.webjars" %% "webjars-play" % "2.1.0-3",
+      "org.webjars" % "jquery" % "1.10.2",
+      "org.webjars" % "bootstrap" % "2.3.2",
+      "org.webjars" % "font-awesome" % "3.2.1",
       "org.webjars" % "jquery-transit" % "0.9.9"
     )
 
