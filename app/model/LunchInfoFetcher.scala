@@ -156,7 +156,7 @@ object LunchInfoFetcher {
 
             def getLunches(p: Element): List[Meal] = {
               val text = if (p != null) p.text.trim else null
-              if (text == null || text.length <= 1) List()
+              if (text == null || text.length <= 1 || weekdays.contains(text)) List()
               else if (text == "**")
                 getLunches(p.nextElementSibling)
               else {
