@@ -94,10 +94,20 @@ object LunchInfoFetcher {
           if (correctWeek.getOrElse(false) && dayH3 != null) {
             val next = dayH3.nextElementSibling
 
+            def splitByCapitalLetters(text: String): List[String] = {
+              if (text == null || text.length == 0) List()
+              else {
+                val capitalLetterPart = text.take(1) + text.drop(1).takeWhile(!_.isUpper)
+                capitalLetterPart :: splitByCapitalLetters(text.drop(capitalLetterPart.length))
+              }
+            }
+
             def getMeals(nextElem: Element): List[Meal] = {
               if (nextElem == null || nextElem.tagName != "p") List()
               else {
-                Meal(nextElem.text) :: getMeals(nextElem.nextElementSibling)
+                splitByCapitalLetters(nextElem.text).map { text =>
+                  Meal(text.trim)
+                } ::: getMeals(nextElem.nextElementSibling)
               }
             }
             getMeals(next)
