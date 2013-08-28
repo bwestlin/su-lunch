@@ -10,4 +10,4 @@ GET     /todaysLunches              controllers.LunchInfo.todaysLunches
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 # WebJars assets
-GET     /webjars/*file                    controllers.WebJarAssets.at(file)
+GET     /webjars/*file              controllers.WebJarAssets.at(file)
