@@ -26,6 +26,12 @@ import model.LunchInfoFetcher
 
 object LunchInfo extends Controller {
 
+  val noCacheHeaders = Seq(
+    CACHE_CONTROL -> "no-cache, no-store, must-revalidate",
+    PRAGMA -> "no-cache",
+    EXPIRES -> "0"
+  )
+
   def index = Action { request =>
     val ipAddress = request.headers.get("X-Forwarded-For") match {
       case Some(ip: String) => ip
@@ -41,7 +47,7 @@ object LunchInfo extends Controller {
       val todaysLunchesFuture = LunchInfoFetcher.fetchTodaysLunchInfo
       Async {
         todaysLunchesFuture.map(todaysLunches =>
-          Ok(views.html.lunchInfo.todaysLunches(todaysLunches)).withHeaders(PRAGMA -> "no-cache")
+          Ok(views.html.lunchInfo.todaysLunches(todaysLunches)).withHeaders(noCacheHeaders:_*)
         )
       }
     }
