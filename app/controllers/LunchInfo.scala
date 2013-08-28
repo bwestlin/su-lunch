@@ -33,12 +33,6 @@ object LunchInfo extends Controller {
   )
 
   def index = Action { request =>
-    val ipAddress = request.headers.get("X-Forwarded-For") match {
-      case Some(ip: String) => ip
-      case None => request.remoteAddress
-    }
-    println("Index requested from ip-address: " + ipAddress + ", request.remoteAddress=" + request.remoteAddress)
-
     Ok(views.html.lunchInfo.index())
   }
 
