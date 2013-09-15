@@ -60,6 +60,7 @@ object LunchInfoFetcher {
 
     var todayDT: DateTime = new DateTime()
     //todayDT = todayDT.minus(Period.days(1))
+    todayDT = todayDT.plus(Period.days(1))
 
     // Get fetcher for each restaurant
     val restaurantsToFetch = Restaurant.getAll.map { restaurant =>
@@ -100,7 +101,7 @@ sealed abstract class LunchInfoFetcher {
     val meals = fetch(day, url)
 
     if (meals != null && mealResultValidators.exists(_(meals)))
-      throw new Exception("Inhämtningen gav ett orimligt resultat")
+      throw new Exception("Inhämtningen gav ett otillförlitligt resultat")
 
     meals
   }
