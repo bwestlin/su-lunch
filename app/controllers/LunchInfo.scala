@@ -22,7 +22,7 @@ import mvc._
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.Play.current
 
-import model.LunchInfoFetcher
+import model.fetchers.LunchInfoFetcher
 
 object LunchInfo extends Controller {
 
