@@ -98,7 +98,10 @@ sealed abstract class LunchInfoFetcher {
 
   def apply(day: DateTime, url: String): Seq[Meal] = {
     val meals = fetch(day, url)
-    if (mealResultValidators.exists(_(meals))) throw new Exception("Inhämtningen gav ett orimligt resultat")
+
+    if (meals != null && mealResultValidators.exists(_(meals)))
+      throw new Exception("Inhämtningen gav ett orimligt resultat")
+
     meals
   }
 
