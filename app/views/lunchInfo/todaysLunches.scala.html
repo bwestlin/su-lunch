@@ -34,8 +34,16 @@
     case Success(_) => {
       <div class="">Inga luncher funna.</div>
     }
-    case Failure(error) => {
-      <div class="alert alert-error"><b>Fel uppstod vid hämtning av lunchinformation!</b><br />@error</div>
+    case Failure(ex) => {
+      <div class="alert alert-error">
+        <i class="icon-bug"></i>
+        <b>Fel uppstod vid hämtning av lunchinformation</b>
+        <br />
+        @(ex.getMessage() match {
+          case message if message => message
+          case _ => ex.toString
+        })
+      </div>
     }
   }
 

@@ -95,10 +95,28 @@ object LunchInfoFetcher {
  * Currently it has to be sealed to make allFetchers work since knownDirectSubclasses only works for sealed classes.
  */
 sealed abstract class LunchInfoFetcher {
-  // TODO Implement some kind of validation of the resulting meals like how many
-  def apply(day: DateTime, url: String): Seq[Meal]
+
+  def apply(day: DateTime, url: String): Seq[Meal] = {
+    val meals = fetch(day, url)
+    if (mealResultValidators.exists(_(meals))) throw new Exception("Inhämtningen gav ett orimligt resultat")
+    meals
+  }
+
+  def fetch(day: DateTime, url: String): Seq[Meal]
+
+  def mealResultValidators: Seq[(Seq[Meal]) => Boolean] = Seq(
+    { meals =>
+      meals.size >= 10
+    },
+    { meals =>
+      meals.exists { meal =>
+        weekdays.exists(weekday => meal.description.contains(weekday) || meal.description.contains(weekday.toLowerCase))
+      }
+    }
+  )
 
   def weekdays = List("Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag")
+
   def months = List("Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti", "September", "Oktober", "November", "December")
 }
 
@@ -107,7 +125,7 @@ sealed abstract class LunchInfoFetcher {
  */
 object LantisLunchInfoFetcher extends LunchInfoFetcher {
 
-  override def apply(dayDT: DateTime, url: String): Seq[Meal] = {
+  override def fetch(dayDT: DateTime, url: String): Seq[Meal] = {
     val doc = Jsoup.connect(url)
       .timeout(10 * 1000)
       .get()
@@ -137,7 +155,7 @@ object LantisLunchInfoFetcher extends LunchInfoFetcher {
  */
 object FossilenLunchInfoFetcher extends LunchInfoFetcher {
 
-  override def apply(dayDT: DateTime, url: String): Seq[Meal] = {
+  override def fetch(dayDT: DateTime, url: String): Seq[Meal] = {
     val doc = Jsoup.connect(url)
       .timeout(10 * 1000)
       .get()
@@ -191,7 +209,7 @@ object FossilenLunchInfoFetcher extends LunchInfoFetcher {
  */
 object StoraSkugganLunchInfoFetcher extends LunchInfoFetcher {
 
-  override def apply(dayDT: DateTime, url: String): Seq[Meal] = {
+  override def fetch(dayDT: DateTime, url: String): Seq[Meal] = {
     val doc = Jsoup.connect(url)
       .timeout(10 * 1000)
       .ignoreHttpErrors(true)
@@ -228,7 +246,7 @@ object StoraSkugganLunchInfoFetcher extends LunchInfoFetcher {
  */
 object KraftanLunchInfoFetcher extends LunchInfoFetcher {
 
-  override def apply(dayDT: DateTime, url: String): Seq[Meal] = {
+  override def fetch(dayDT: DateTime, url: String): Seq[Meal] = {
     val doc = Jsoup.connect(url)
       .timeout(10 * 1000)
       .get()
