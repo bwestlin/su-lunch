@@ -97,6 +97,9 @@ object LunchInfoFetcher {
 sealed abstract class LunchInfoFetcher {
   // TODO Implement some kind of validation of the resulting meals like how many
   def apply(day: DateTime, url: String): Seq[Meal]
+
+  def weekdays = List("Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag")
+  def months = List("Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti", "September", "Oktober", "November", "December")
 }
 
 /**
@@ -111,7 +114,7 @@ object LantisLunchInfoFetcher extends LunchInfoFetcher {
 
     val lunchmenulist = doc.select(".lunchmenulist").first
 
-    val weekdays = List("måndag", "tisdag", "onsdag", "torsdag", "fredag", "lördag", "söndag")
+    val weekdays = this.weekdays.map(_.toLowerCase)
     val weekday = weekdays(dayDT.dayOfWeek.get - 1)
     if (lunchmenulist != null && lunchmenulist.select("h2:containsOwn(" + weekday + ")").first != null) {
 
@@ -140,10 +143,9 @@ object FossilenLunchInfoFetcher extends LunchInfoFetcher {
       .get()
 
     val weekStartDate = dayDT.withDayOfWeek(1)
-    val months = List("januari", "februari", "mars", "april", "maj", "juni", "juli", "augusti", "september", "oktober", "november", "december")
+    val months = this.months.map(_.toLowerCase)
     val weekStartMonth = months(weekStartDate.monthOfYear.get - 1)
 
-    val weekdays = List("Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag")
     val weekday = weekdays(dayDT.dayOfWeek.get - 1)
 
     val baseElement = doc.select(".sv-text-portlet-content")
@@ -196,7 +198,6 @@ object StoraSkugganLunchInfoFetcher extends LunchInfoFetcher {
       .header("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.22 (KHTML, like Gecko) Ubuntu Chromium/25.0.1364.160 Chrome/25.0.1364.160 Safari/537.22")
       .get()
 
-    val weekdays = List("Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag")
     val weekday = weekdays(dayDT.dayOfWeek.get - 1)
 
     //val dayTd = doc.select("div.restcontent").select("td:contains(" + weekday + ")").first
@@ -232,7 +233,6 @@ object KraftanLunchInfoFetcher extends LunchInfoFetcher {
       .timeout(10 * 1000)
       .get()
 
-    val weekdays = List("Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag")
     val weekday = weekdays(dayDT.dayOfWeek.get - 1)
 
     val dayP = doc.select("#about p:contains(" + weekday + ")").first
