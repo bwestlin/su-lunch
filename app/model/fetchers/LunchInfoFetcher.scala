@@ -126,7 +126,7 @@ sealed abstract class LunchInfoFetcher {
 }
 
 /**
- * A function to fetch all lunches for a given day from restaurant Lantis, see http://www.hors.se/restaurang-lantis
+ * Function to fetch all lunches for a given day from restaurant Lantis, see http://www.hors.se/restaurang-lantis
  */
 object LantisLunchInfoFetcher extends LunchInfoFetcher {
 
@@ -156,7 +156,7 @@ object LantisLunchInfoFetcher extends LunchInfoFetcher {
 }
 
 /**
- * A function to fetch all lunches for a given day from restaurant Fossilen, see http://nrm.se/besokmuseet/restaurangfossilen
+ * Function to fetch all lunches for a given day from restaurant Fossilen, see http://nrm.se/besokmuseet/restaurangfossilen
  */
 object FossilenLunchInfoFetcher extends LunchInfoFetcher {
 
@@ -210,7 +210,7 @@ object FossilenLunchInfoFetcher extends LunchInfoFetcher {
 }
 
 /**
- * A function to fetch all lunches for a given day from restaurant Stora Skuggan, see http://gastrogate.com/restaurang/storaskuggan/page/3
+ * Function to fetch all lunches for a given day from restaurant Stora Skuggan, see http://gastrogate.com/restaurang/storaskuggan/page/3
  */
 object StoraSkugganLunchInfoFetcher extends LunchInfoFetcher {
 
@@ -247,7 +247,7 @@ object StoraSkugganLunchInfoFetcher extends LunchInfoFetcher {
 }
 
 /**
- * A function to fetch all lunches for a given day from restaurant Kräftan, see http://www.kraftan.nu/
+ * Function to fetch all lunches for a given day from restaurant Kräftan, see http://www.kraftan.nu/
  */
 object KraftanLunchInfoFetcher extends LunchInfoFetcher {
 
