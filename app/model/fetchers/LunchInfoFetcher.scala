@@ -60,7 +60,6 @@ object LunchInfoFetcher {
 
     var todayDT: DateTime = new DateTime()
     //todayDT = todayDT.minus(Period.days(1))
-    todayDT = todayDT.plus(Period.days(1))
 
     // Get fetcher for each restaurant
     val restaurantsToFetch = Restaurant.getAll.map { restaurant =>
