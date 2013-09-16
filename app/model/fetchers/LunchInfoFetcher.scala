@@ -92,7 +92,9 @@ object LunchInfoFetcher {
 
 /**
  * Base class for functions to fetch lunches for restaurants.
- * Currently it has to be sealed to make allFetchers work since knownDirectSubclasses only works for sealed classes.
+ * Currently it has to be sealed to make LunchInfoFetcher.allFetchers to work since knownDirectSubclasses
+ * only works for sealed classes. Which also has the consequence that the objects extending this class has to
+ * be in the same file.
  */
 sealed abstract class LunchInfoFetcher {
 
