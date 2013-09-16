@@ -233,7 +233,7 @@ object StoraSkugganLunchInfoFetcher extends LunchInfoFetcher {
 
         if (firstTd == null || firstTd.className == "menu_header") List()
         else {
-          Meal(row.text) :: getRows(row.nextElementSibling)
+          Meal(firstTd.text) :: getRows(row.nextElementSibling)
         }
       }
 
