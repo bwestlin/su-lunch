@@ -187,6 +187,8 @@ object FossilenLunchInfoFetcher extends LunchInfoFetcher {
     if (correctWeek.getOrElse(false) && dayH3 != null) {
       val next = dayH3.nextElementSibling
 
+      /*
+      This has to be thought out a little better
       def splitByCapitalLetters(text: String): List[String] = {
         if (text == null || text.length == 0) List()
         else {
@@ -194,13 +196,17 @@ object FossilenLunchInfoFetcher extends LunchInfoFetcher {
           capitalLetterPart :: splitByCapitalLetters(text.drop(capitalLetterPart.length))
         }
       }
+      */
 
       def getMeals(nextElem: Element): List[Meal] = {
         if (nextElem == null || nextElem.tagName != "p") List()
         else {
-          splitByCapitalLetters(nextElem.text).map { text =>
-            Meal(text.trim)
-          } ::: getMeals(nextElem.nextElementSibling)
+          // Split meals by html breaking newlines
+          val meals = for {
+            mealByBr <- nextElem.html.split("<br />").map(Jsoup.parse(_).text()).toList
+          } yield Meal(mealByBr)
+
+          meals ::: getMeals(nextElem.nextElementSibling)
         }
       }
       getMeals(next)
