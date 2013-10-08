@@ -264,17 +264,30 @@ object KraftanLunchInfoFetcher extends LunchInfoFetcher {
     val dayP = doc.select("#about p:contains(" + weekday + ")").first
     if (dayP != null) {
 
-      def getLunches(p: Element): List[Meal] = {
-        val text = if (p != null) p.text.trim else null
-        if (text == null || text.length <= 1 || weekdays.contains(text)) List()
-        else if (text == "**")
-          getLunches(p.nextElementSibling)
+      def streamLines(p: Element): Stream[String] = {
+        def streamByBr(byBr: List[String]): Stream[String] = byBr match {
+          case Nil => Stream.empty
+          case x :: xs => x #:: streamByBr(xs)
+        }
+
+        val html = if (p != null) p.html else null
+        if (html == null) Stream.empty
         else {
-          Meal(text) :: getLunches(p.nextElementSibling)
+          val byBr = html.split("<br />").toList.map { (line) => Jsoup.parse(line.trim).text() }
+          streamByBr(byBr) #::: streamLines(p.nextElementSibling())
         }
       }
 
-      getLunches(dayP.nextElementSibling)
+      def getLunches(lines: Stream[String]): List[Meal] = {
+        if (lines.isEmpty) List()
+        else lines match {
+          case x #:: xs if x == weekday || x == "**" => getLunches(xs)
+          case x #:: xs if x == null || x.length <= 1 || weekdays.contains(x) => List()
+          case x #:: xs => Meal(x) :: getLunches(xs)
+        }
+      }
+
+      getLunches(streamLines(dayP))
     }
     else null
   }
