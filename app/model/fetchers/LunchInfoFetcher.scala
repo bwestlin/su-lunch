@@ -166,8 +166,7 @@ object FossilenLunchInfoFetcher extends LunchInfoFetcher {
       .get()
 
     val weekStartDate = dayDT.withDayOfWeek(1)
-    val months = this.months.map(_.toLowerCase)
-    val weekStartMonth = months(weekStartDate.monthOfYear.get - 1)
+    val currentWeek = weekStartDate.weekOfWeekyear().get()
 
     val weekday = weekdays(dayDT.dayOfWeek.get - 1)
 
@@ -176,8 +175,7 @@ object FossilenLunchInfoFetcher extends LunchInfoFetcher {
     // Check that the webpage consist of the right week according to today
     val correctWeek = Option(baseElement.select("h2").first).map { headerElem =>
       headerElem.text.split(Array(',', '-', ' ')).map(_.trim).toList match {
-        case _ :: _ :: _ :: _ :: weekStartDay :: _ :: month :: Nil
-          if weekStartDay.toInt == weekStartDate.dayOfMonth.get && month == weekStartMonth => true
+        case _ :: _ :: week :: _ if week.toInt == currentWeek => true
         case _ => false
       }
     }
