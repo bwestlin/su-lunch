@@ -173,7 +173,7 @@ object FossilenLunchInfoFetcher extends LunchInfoFetcher {
     val baseElement = doc.select(".sv-text-portlet-content")
 
     // Check that the webpage consist of the right week according to today
-    val correctWeek = Option(baseElement.select("h2").first).map { headerElem =>
+    val correctWeek = Option(baseElement.select("h2:containsOwn(Meny)").first).map { headerElem =>
       headerElem.text.split(Array(',', '-', ' ')).map(_.trim).toList match {
         case _ :: _ :: week :: _ if week.toInt == currentWeek => true
         case _ => false
