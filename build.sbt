@@ -1,4 +1,4 @@
-gname := "su-lunch"
+name := "su-lunch"
 
 version := "1.0-SNAPSHOT"
 
