@@ -16,17 +16,42 @@
 
 package model
 
-case class Restaurant(id: Integer, name: String, url: String, fetcher: String) {
+case class Restaurant(id: Integer,
+                      name: String,
+                      url: String,
+                      requestHeaders: Option[Seq[(String, String)]],
+                      parser: String) {
 }
 
 object Restaurant {
 
   def getAll: Seq[Restaurant] = {
     Seq(
-      Restaurant(1, "Restaurang Lantis", "http://www.hors.se/restaurang-lantis", "Lantis"),
-      Restaurant(2, "Restaurang Fossilen", "http://nrm.se/besokmuseet/restaurangfossilen", "Fossilen"),
-      Restaurant(3, "Stora Skuggans Wärdshus", "http://gastrogate.com/restaurang/storaskuggan/page/3", "StoraSkuggan"),
-      Restaurant(4, "Värdshuset Kräftan", "http://www.kraftan.nu/", "Kraftan")
+      Restaurant(1,
+        "Restaurang Lantis",
+        "http://www.hors.se/restaurang-lantis",
+        None,
+        "Lantis"),
+
+      Restaurant(2,
+        "Restaurang Fossilen",
+        "http://nrm.se/besokmuseet/restaurangfossilen",
+        None,
+        "Fossilen"),
+
+      Restaurant(3,
+        "Stora Skuggans Wärdshus",
+        "http://gastrogate.com/restaurang/storaskuggan/page/3",
+        Option(Seq(
+          "User-Agent" -> "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.22 (KHTML, like Gecko) Ubuntu Chromium/25.0.1364.160 Chrome/25.0.1364.160 Safari/537.22"
+        )),
+        "StoraSkuggan"),
+
+      Restaurant(4,
+        "Värdshuset Kräftan",
+        "http://www.kraftan.nu/",
+        None,
+        "Kraftan")
     )
   }
 }

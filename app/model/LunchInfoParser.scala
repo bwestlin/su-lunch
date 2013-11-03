@@ -14,79 +14,38 @@
  * limitations under the License.
  */
 
-package model.fetchers
+package model
 
-import model._
 import collection.JavaConversions._
-import scala.util.{Failure, Try}
-import scala.concurrent.Future
-import play.api.Logger
-import play.api.libs.concurrent.Execution.Implicits._
 import org.jsoup._
 import nodes.Element
-import org.joda.time.{DateTime, Period}
+import org.joda.time.DateTime
 
-object LunchInfoFetcher {
+object LunchInfoParser {
 
   /**
-   * A map with all LunchInfoFetchers mapped to their corresponding name
+   * A map with all LunchInfoParsers mapped to their corresponding name
    */
-  lazy val allFetchers: Map[String, LunchInfoFetcher] = {
+  lazy val allParsers: Map[String, LunchInfoParser] = {
     import scala.reflect.runtime._
 
-    val lunchInfoFetcherClass = classOf[LunchInfoFetcher]
-    val rootMirror = universe.runtimeMirror(lunchInfoFetcherClass.getClassLoader)
-    var lunchInfoFetcherClassSymbol = rootMirror.classSymbol(lunchInfoFetcherClass)
+    val lunchInfoParserClass = classOf[LunchInfoParser]
+    val rootMirror = universe.runtimeMirror(lunchInfoParserClass.getClassLoader)
+    var lunchInfoParserClassSymbol = rootMirror.classSymbol(lunchInfoParserClass)
 
     // For some unknown reason this has to be done to make it work
-    rootMirror.reflectClass(lunchInfoFetcherClassSymbol)
+    rootMirror.reflectClass(lunchInfoParserClassSymbol)
 
-    // Find all subclass singletons of class LunchInfoFetcher
-    lunchInfoFetcherClassSymbol.knownDirectSubclasses.flatMap { symbol =>
+    // Find all subclass singletons of class LunchInfoParser
+    lunchInfoParserClassSymbol.knownDirectSubclasses.flatMap { symbol =>
       if (symbol.isModuleClass) {
         val moduleMirror = rootMirror.reflectModule(symbol.companionSymbol.asModule)
-        val name = symbol.name.toString.dropRight(lunchInfoFetcherClassSymbol.name.toString.length)
-        val instance = moduleMirror.instance.asInstanceOf[LunchInfoFetcher]
+        val name = symbol.name.toString.dropRight(lunchInfoParserClassSymbol.name.toString.length)
+        val instance = moduleMirror.instance.asInstanceOf[LunchInfoParser]
         Option((name, instance))
       }
       else None
     }.toMap
-  }
-
-  /**
-   * Fetch lunch info for today from all defined restaurants
-   */
-  def fetchTodaysLunchInfo: Future[Seq[(Restaurant, Try[Seq[Meal]])]] = {
-
-    var todayDT: DateTime = new DateTime()
-    //todayDT = todayDT.minus(Period.days(1))
-
-    // Get fetcher for each restaurant
-    val restaurantsToFetch = Restaurant.getAll.map { restaurant =>
-      val fetcher = allFetchers.find {
-        case (name, _) => name == restaurant.fetcher
-      }
-      (restaurant, fetcher.map(_._2).getOrElse(null))
-    }
-
-    // Fetch lunch info from each restaurant in parallel
-    val futureLunchInfos = restaurantsToFetch.map {
-      case (restaurant, fetcher) => Future {
-        (restaurant, Try(fetcher(todayDT, restaurant.url)))
-      }
-    }
-
-    Future.sequence(futureLunchInfos).map { lunchInfos =>
-      // Logging for failing lunchinfo sources
-      for ((resturant, mealsTry) <- lunchInfos) {
-        mealsTry match {
-          case Failure(ex) =>
-            Logger.warn("Lunchinfo fetching for restaurant: " + resturant.name + " failed!", ex)
-          case _ =>
-        }
-      }
-      lunchInfos
-    }
   }
 }
 
@@ -96,10 +55,10 @@ object LunchInfoFetcher {
  * only works for sealed classes. Which also has the consequence that the objects extending this class has to
  * be in the same file.
  */
-sealed abstract class LunchInfoFetcher {
+sealed abstract class LunchInfoParser {
 
-  def apply(day: DateTime, url: String): Seq[Meal] = {
-    val meals = fetch(day, url)
+  def apply(day: DateTime, body: String): Seq[Meal] = {
+    val meals = parse(day, body)
 
     if (meals != null && mealResultValidators.exists(_(meals)))
       throw new Exception("Inhämtningen gav ett otillförlitligt resultat")
@@ -107,7 +66,7 @@ sealed abstract class LunchInfoFetcher {
     meals
   }
 
-  def fetch(day: DateTime, url: String): Seq[Meal]
+  def parse(day: DateTime, body: String): Seq[Meal]
 
   def mealResultValidators: Seq[(Seq[Meal]) => Boolean] = Seq(
     { meals =>
@@ -126,14 +85,12 @@ sealed abstract class LunchInfoFetcher {
 }
 
 /**
- * Function to fetch all lunches for a given day from restaurant Lantis, see http://www.hors.se/restaurang-lantis
+ * Function to parse all lunches for a given day from restaurant Lantis, see http://www.hors.se/restaurang-lantis
  */
-object LantisLunchInfoFetcher extends LunchInfoFetcher {
+object LantisLunchInfoParser extends LunchInfoParser {
 
-  override def fetch(dayDT: DateTime, url: String): Seq[Meal] = {
-    val doc = Jsoup.connect(url)
-      .timeout(10 * 1000)
-      .get()
+  override def parse(dayDT: DateTime, body: String): Seq[Meal] = {
+    val doc = Jsoup.parse(body)
 
     val lunchmenulist = doc.select(".lunchmenulist").first
 
@@ -156,14 +113,12 @@ object LantisLunchInfoFetcher extends LunchInfoFetcher {
 }
 
 /**
- * Function to fetch all lunches for a given day from restaurant Fossilen, see http://nrm.se/besokmuseet/restaurangfossilen
+ * Function to parse all lunches for a given day from restaurant Fossilen, see http://nrm.se/besokmuseet/restaurangfossilen
  */
-object FossilenLunchInfoFetcher extends LunchInfoFetcher {
+object FossilenLunchInfoParser extends LunchInfoParser {
 
-  override def fetch(dayDT: DateTime, url: String): Seq[Meal] = {
-    val doc = Jsoup.connect(url)
-      .timeout(10 * 1000)
-      .get()
+  override def parse(dayDT: DateTime, body: String): Seq[Meal] = {
+    val doc = Jsoup.parse(body)
 
     val weekStartDate = dayDT.withDayOfWeek(1)
     val currentWeek = weekStartDate.weekOfWeekyear().get()
@@ -214,22 +169,18 @@ object FossilenLunchInfoFetcher extends LunchInfoFetcher {
 }
 
 /**
- * Function to fetch all lunches for a given day from restaurant Stora Skuggan, see http://gastrogate.com/restaurang/storaskuggan/page/3
+ * Function to parse all lunches for a given day from restaurant Stora Skuggan, see http://gastrogate.com/restaurang/storaskuggan/page/3
  */
-object StoraSkugganLunchInfoFetcher extends LunchInfoFetcher {
+object StoraSkugganLunchInfoParser extends LunchInfoParser {
 
-  override def fetch(dayDT: DateTime, url: String): Seq[Meal] = {
-    val doc = Jsoup.connect(url)
-      .timeout(10 * 1000)
-      .ignoreHttpErrors(true)
-      .header("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.22 (KHTML, like Gecko) Ubuntu Chromium/25.0.1364.160 Chrome/25.0.1364.160 Safari/537.22")
-      .get()
+  override def parse(dayDT: DateTime, body: String): Seq[Meal] = {
+    val doc = Jsoup.parse(body)
 
     val weekday = weekdays(dayDT.dayOfWeek.get - 1)
 
     val dayTd = doc.select("td:containsOwn(" + weekday + ")").first
     if (dayTd != null) {
-      val next = dayTd.parent.nextElementSibling.nextElementSibling
+      val next = dayTd.parent.nextElementSibling
 
       def getRows(row: Element): List[Meal] = {
         val tds = if (row != null) row.select("td") else null
@@ -248,14 +199,12 @@ object StoraSkugganLunchInfoFetcher extends LunchInfoFetcher {
 }
 
 /**
- * Function to fetch all lunches for a given day from restaurant Kräftan, see http://www.kraftan.nu/
+ * Function to parse all lunches for a given day from restaurant Kräftan, see http://www.kraftan.nu/
  */
-object KraftanLunchInfoFetcher extends LunchInfoFetcher {
+object KraftanLunchInfoParser extends LunchInfoParser {
 
-  override def fetch(dayDT: DateTime, url: String): Seq[Meal] = {
-    val doc = Jsoup.connect(url)
-      .timeout(10 * 1000)
-      .get()
+  override def parse(dayDT: DateTime, body: String): Seq[Meal] = {
+    val doc = Jsoup.parse(body)
 
     val weekday = weekdays(dayDT.dayOfWeek.get - 1)
 
