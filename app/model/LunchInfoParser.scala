@@ -80,6 +80,7 @@ sealed abstract class LunchInfoParser {
   )
 
   def weekdays = List("Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag")
+  def weekdaysShort = List("Mån", "Tis", "Ons", "Tor", "Fre", "Lör", "Sön")
 
   def months = List("Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti", "September", "Oktober", "November", "December")
 }
@@ -92,21 +93,15 @@ object LantisLunchInfoParser extends LunchInfoParser {
   override def parse(dayDT: DateTime, body: String): Seq[Meal] = {
     val doc = Jsoup.parse(body)
 
-    val lunchmenulist = doc.select(".lunchmenulist").first
+    val lunchmenulist = doc.select(".hors-menu").first
+    val weekday = weekdaysShort(dayDT.dayOfWeek.get - 1)
+    val title = "Dagens lunch " + weekday + ". " + dayDT.toString("dd/MM")
 
-    val weekdays = this.weekdays.map(_.toLowerCase)
-    val weekday = weekdays(dayDT.dayOfWeek.get - 1)
-    if (lunchmenulist != null && lunchmenulist.select("h2:containsOwn(" + weekday + ")").first != null) {
+    if (lunchmenulist != null && lunchmenulist.select("h2:containsOwn(" + title + ")").first != null) {
+      val types = List("Svenska smaker", "World food", "Healthy")
 
-      val typMap = Map(
-        "kott" -> "Kött",
-        "fisk" -> "Fisk",
-        "veg"  -> "Vegetarisk"
-      ).withDefaultValue("?")
-
-      lunchmenulist.select(".lunchmenulisttext").map { elem =>
-        val typ = elem.parent.className
-        Meal(typMap(typ) + ": " + elem.text)
+      lunchmenulist.select(".row .text-left").zip(types).map { elem =>
+        Meal(elem._2 + ": " + elem._1.text)
       }
     } else null
   }
