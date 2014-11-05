@@ -6,3 +6,4 @@ tmp
 .history
 dist
 setenv.sh
+.idea
