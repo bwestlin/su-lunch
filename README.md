@@ -7,7 +7,7 @@ The application is built using **[Play Framework](http://www.playframework.com)*
 Data collecting is done with **[Web scraping](http://en.wikipedia.org/wiki/Web_scraping)** using the **[jsoup](http://jsoup.org/)** HTML Parser.
 
 ## Requirements ##
-The main requirement for running this application is Play Framework v2.1.3, which can be downloaded **[here](http://www.playframework.com/download)**
+The main requirement for running this application is Play Framework v2.2.5, which can be downloaded **[here](http://www.playframework.com/download)**
 Later when referring to ```play``` at the command line this refers to the **play** script in the playframework installation directory.
 
 ## Running ##
