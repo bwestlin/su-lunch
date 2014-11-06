@@ -32,11 +32,19 @@ object LunchInfo extends Controller {
     EXPIRES -> "0"
   )
 
+  lazy val cacheDuration = Play.maybeApplication.flatMap {
+    _.mode match {
+      // Cache for 10 minutes in production mode
+      case Mode.Prod => Some(60 * 10)
+      case _ => None
+    }
+  }.getOrElse(1)
+
   def index = Action { request =>
     Ok(views.html.lunchInfo.index())
   }
 
-  def todaysLunches = Cached("todaysLunches", 60 * 10) { // Cache for 10 minutes
+  def todaysLunches = Cached("todaysLunches", cacheDuration) {
     Action.async { request =>
       val todaysLunchesFuture = LunchInfoFetcher.fetchTodaysLunchInfo
       todaysLunchesFuture.map(todaysLunches =>
