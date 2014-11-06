@@ -17,31 +17,7 @@
 @()
 
 @inHead = {
-<script language="javascript">
-  $(function(){
-
-    var todaysLunchesShown = false;
-    function showTodaysLunches() {
-      if (!todaysLunchesShown) {
-        $("#todaysLunches").show().transition({ opacity: 1 }, "slow");
-        todaysLunchesShown = true;
-      }
-    }
-
-    $("#todaysLunches").load("@routes.LunchInfo.todaysLunches()", function(response, status, xhr) {
-      var $todaysLunches = $("#todaysLunches");
-      showTodaysLunches();
-      if (status == "error") {
-        var msg = "Tyvärr uppstod ett fel: ";
-        $todaysLunches.html("<div class=\"alert alert-error\"><b>Fel!</b> " + msg + xhr.status + " " + xhr.statusText + "</div>");
-      }
-    });
-
-    setTimeout(function() {
-      showTodaysLunches();
-    }, 250);
-  });
-</script>
+  <script type="text/javascript" src="@routes.Assets.at("javascripts/main.js")"></script>
 }
 
 @layouts.main(title = "Dagens luncher -&nbsp;Stockholms&nbsp;universitet", inHead = inHead) {

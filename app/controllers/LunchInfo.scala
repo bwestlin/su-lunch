@@ -19,6 +19,7 @@ package controllers
 import play.api._
 import cache.Cached
 import mvc._
+import play.api.http.MimeTypes
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.Play.current
 
@@ -40,7 +41,7 @@ object LunchInfo extends Controller {
     }
   }.getOrElse(1)
 
-  def index = Action { request =>
+  def index = Action { implicit request =>
     Ok(views.html.lunchInfo.index())
   }
 
@@ -51,5 +52,19 @@ object LunchInfo extends Controller {
         Ok(views.html.lunchInfo.todaysLunches(todaysLunches)).withHeaders(noCacheHeaders:_*)
       )
     }
+  }
+
+  val jsReverseRoutes = {
+    val jsRoutesClass = classOf[routes.javascript]
+    val controllers = jsRoutesClass.getFields.map(_.get(null))
+    controllers.flatMap { controller =>
+      controller.getClass.getDeclaredMethods.map { action =>
+        action.invoke(controller).asInstanceOf[play.core.Router.JavascriptReverseRoute]
+      }
+    }
+  }
+
+  def jsRoutes = Action { implicit request =>
+    Ok(Routes.javascriptRouter("jsRoutes")(jsReverseRoutes: _*)).as(MimeTypes.JAVASCRIPT)
   }
 }
