@@ -29,7 +29,7 @@ object Restaurant {
     Seq(
       Restaurant(1,
         "Restaurang Lantis",
-        "http://www.hors.se/restaurang-lantis",
+        "http://www.hors.se/restaurang/restaurang-lantis/",
         None,
         "Lantis"),
 
