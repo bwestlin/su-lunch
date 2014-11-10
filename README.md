@@ -1,7 +1,7 @@
 # su-lunch #
 > Dagens luncher - Stockholms Universitet
 
-This is a simple web-application used for aggregating lunch menus in the area around Stockholm University and it's currently alive at **http://su-lunch.herokuapp.com/**.
+This is a simplistic web-application used for aggregating lunch menus in the area around Stockholm University and it's currently alive at **http://su-lunch.herokuapp.com/**.
 
 The application is built using **[Play Framework](http://www.playframework.com)** and written mainly in **[Scala](http://www.scala-lang.org/)**.
 Data collecting is done with **[Web scraping](http://en.wikipedia.org/wiki/Web_scraping)** using the **[jsoup](http://jsoup.org/)** HTML Parser.
