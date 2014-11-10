@@ -60,29 +60,24 @@ sealed abstract class LunchInfoParser {
   def apply(day: DateTime, body: String): Seq[Meal] = {
     val meals = parse(day, body)
 
-    if (meals != null && mealResultValidators.exists(_(meals)))
+    if (meals != null && mealResultInvalid(meals))
       throw new Exception("Inhämtningen gav ett otillförlitligt resultat")
 
     meals
   }
 
-  def parse(day: DateTime, body: String): Seq[Meal]
+  protected def parse(day: DateTime, body: String): Seq[Meal]
 
-  def mealResultValidators: Seq[(Seq[Meal]) => Boolean] = Seq(
-    { meals =>
-      meals.size >= 10
-    },
-    { meals =>
-      meals.exists { meal =>
-        weekdays.exists(weekday => meal.description.contains(weekday) || meal.description.contains(weekday.toLowerCase))
-      }
+  private def mealResultInvalid(meals: Seq[Meal]) = {
+    meals.size >= 10 || meals.exists { meal =>
+      weekdays.exists(weekday => meal.description.contains(weekday) || meal.description.contains(weekday.toLowerCase))
     }
-  )
+  }
 
-  def weekdays = List("Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag")
-  def weekdaysShort = List("Mån", "Tis", "Ons", "Tors", "Fre", "Lör", "Sön")
+  protected def weekdays = List("Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag")
+  protected def weekdaysShort = List("Mån", "Tis", "Ons", "Tors", "Fre", "Lör", "Sön")
 
-  def months = List("Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti", "September", "Oktober", "November", "December")
+  protected def months = List("Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti", "September", "Oktober", "November", "December")
 }
 
 /**
@@ -90,7 +85,7 @@ sealed abstract class LunchInfoParser {
  */
 object LantisLunchInfoParser extends LunchInfoParser {
 
-  override def parse(dayDT: DateTime, body: String): Seq[Meal] = {
+  override protected def parse(dayDT: DateTime, body: String): Seq[Meal] = {
     val doc = Jsoup.parse(body)
 
     val lunchmenulist = doc.select(".hors-menu").first
@@ -112,7 +107,7 @@ object LantisLunchInfoParser extends LunchInfoParser {
  */
 object FossilenLunchInfoParser extends LunchInfoParser {
 
-  override def parse(dayDT: DateTime, body: String): Seq[Meal] = {
+  override protected def parse(dayDT: DateTime, body: String): Seq[Meal] = {
     val doc = Jsoup.parse(body)
 
     val weekStartDate = dayDT.withDayOfWeek(1)
@@ -168,7 +163,7 @@ object FossilenLunchInfoParser extends LunchInfoParser {
  */
 object StoraSkugganLunchInfoParser extends LunchInfoParser {
 
-  override def parse(dayDT: DateTime, body: String): Seq[Meal] = {
+  override protected def parse(dayDT: DateTime, body: String): Seq[Meal] = {
     val doc = Jsoup.parse(body)
 
     val weekday = weekdays(dayDT.dayOfWeek.get - 1)
@@ -198,7 +193,7 @@ object StoraSkugganLunchInfoParser extends LunchInfoParser {
  */
 object KraftanLunchInfoParser extends LunchInfoParser {
 
-  override def parse(dayDT: DateTime, body: String): Seq[Meal] = {
+  override protected def parse(dayDT: DateTime, body: String): Seq[Meal] = {
     val doc = Jsoup.parse(body)
 
     val weekday = weekdays(dayDT.dayOfWeek.get - 1)

@@ -41,7 +41,7 @@ object LunchInfoFetcher {
         .withRequestTimeout(10 * 1000)
 
       holder.get().map { response =>
-        (restaurant, Try(parser.parse(todayDT, response.body)))
+        (restaurant, Try(parser(todayDT, response.body)))
       } recover {
         case e => (restaurant, Failure(e))
       }
