@@ -60,7 +60,7 @@ sealed abstract class LunchInfoParser {
   def apply(day: DateTime, body: String): Seq[Meal] = {
     val meals = parse(day, body)
 
-    if (meals != null && mealResultInvalid(meals))
+    if (meals != null && mealResultUnreasonable(meals))
       throw new Exception("Inhämtningen gav ett otillförlitligt resultat")
 
     meals
@@ -68,7 +68,7 @@ sealed abstract class LunchInfoParser {
 
   protected def parse(day: DateTime, body: String): Seq[Meal]
 
-  private def mealResultInvalid(meals: Seq[Meal]) = {
+  private def mealResultUnreasonable(meals: Seq[Meal]) = {
     meals.size >= 10 || meals.exists { meal =>
       weekdays.exists(weekday => meal.description.contains(weekday) || meal.description.contains(weekday.toLowerCase))
     }
