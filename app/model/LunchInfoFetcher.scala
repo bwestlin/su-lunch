@@ -14,13 +14,17 @@ object LunchInfoFetcher {
   type RestaurantWithParser = (Restaurant, LunchInfoParser)
   type RestaurantWithMeals  = (Restaurant, Try[Seq[Meal]])
 
-  // Get parser for each restaurant
-  def allRestaurantsWithParser = Restaurant.getAll.map { restaurant =>
-    val parser = allParsers.find {
-      case (name, _) => name == restaurant.parser
+  /**
+   * Get parser for each defined restaurant
+   */
+  def allRestaurantsWithParser: Seq[RestaurantWithParser] = Restaurant.getAll.map { restaurant =>
+    val maybeParser = allParsers.find { case (name, _) =>
+      name == restaurant.parser
     }
-    (restaurant, parser.map(_._2).getOrElse(null))
-  }
+    maybeParser.map { case (_, parser) =>
+      (restaurant, parser)
+    }
+  }.flatten
 
   /**
    * Fetch lunch info for today from all defined restaurants
@@ -30,17 +34,16 @@ object LunchInfoFetcher {
     val todayDT = DateTime.now()
 
     // Fetch lunch info from each restaurant and parse in parallel
-    val futureLunchInfos = restaurantsWithParser.map {
-      case (restaurant, parser) => {
-        val holder = WS.url(restaurant.url)
-          .withHeaders(restaurant.requestHeaders.getOrElse(Seq()):_*)
-          .withRequestTimeout(10 * 1000)
+    val futureLunchInfos = restaurantsWithParser.map { case (restaurant, parser) =>
 
-        holder.get.map { response =>
-          (restaurant, Try(parser.parse(todayDT, response.body)))
-        } recover {
-          case e => (restaurant, Failure(e))
-        }
+      val holder = WS.url(restaurant.url)
+        .withHeaders(restaurant.requestHeaders.getOrElse(Nil): _*)
+        .withRequestTimeout(10 * 1000)
+
+      holder.get().map { response =>
+        (restaurant, Try(parser.parse(todayDT, response.body)))
+      } recover {
+        case e => (restaurant, Failure(e))
       }
     }
 
@@ -49,7 +52,7 @@ object LunchInfoFetcher {
       for ((resturant, mealsTry) <- lunchInfos) {
         mealsTry match {
           case Failure(ex) =>
-            Logger.warn("Lunchinfo fetching for restaurant: " + resturant.name + " failed!", ex)
+            Logger.warn(s"Lunchinfo fetching for restaurant: ${resturant.name} failed!", ex)
           case _ =>
         }
       }
