@@ -46,8 +46,8 @@ object LunchInfo extends Controller {
   }
 
   def todaysLunches = Cached("todaysLunches", cacheDuration) {
-    Action.async { request =>
-      val todaysLunchesFuture = LunchInfoFetcher.fetchTodaysLunchInfo
+    Action.async { implicit request =>
+      val todaysLunchesFuture = LunchInfoFetcher.fetchTodaysLunchInfo()
       todaysLunchesFuture.map(todaysLunches =>
         Ok(views.html.lunchInfo.todaysLunches(todaysLunches)).withHeaders(noCacheHeaders:_*)
       )

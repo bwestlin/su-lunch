@@ -11,21 +11,23 @@ object LunchInfoFetcher {
 
   import LunchInfoParser._
 
+  type RestaurantWithParser = (Restaurant, LunchInfoParser)
+  type RestaurantWithMeals  = (Restaurant, Try[Seq[Meal]])
+
+  // Get parser for each restaurant
+  def allRestaurantsWithParser = Restaurant.getAll.map { restaurant =>
+    val parser = allParsers.find {
+      case (name, _) => name == restaurant.parser
+    }
+    (restaurant, parser.map(_._2).getOrElse(null))
+  }
+
   /**
    * Fetch lunch info for today from all defined restaurants
    */
-  def fetchTodaysLunchInfo: Future[Seq[(Restaurant, Try[Seq[Meal]])]] = {
+  def fetchTodaysLunchInfo(restaurantsWithParser: Seq[RestaurantWithParser] = allRestaurantsWithParser): Future[Seq[RestaurantWithMeals]] = {
 
-    var todayDT: DateTime = new DateTime()
-    //todayDT = todayDT.minus(Period.days(1))
-
-    // Get parser for each restaurant
-    val restaurantsWithParser = Restaurant.getAll.map { restaurant =>
-      val parser = allParsers.find {
-        case (name, _) => name == restaurant.parser
-      }
-      (restaurant, parser.map(_._2).getOrElse(null))
-    }
+    val todayDT = DateTime.now()
 
     // Fetch lunch info from each restaurant and parse in parallel
     val futureLunchInfos = restaurantsWithParser.map {
