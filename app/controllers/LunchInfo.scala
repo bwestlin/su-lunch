@@ -17,8 +17,8 @@
 package controllers
 
 import play.api._
-import cache.Cached
 import mvc._
+import play.api.cache.Cached
 import play.api.http.MimeTypes
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.Play.current
@@ -45,7 +45,7 @@ object LunchInfo extends Controller {
     Ok(views.html.lunchInfo.index())
   }
 
-  def todaysLunches = Cached("todaysLunches", cacheDuration) {
+  def todaysLunches = Cached.status(_ => "todaysLunches", OK, cacheDuration) {
     Action.async { implicit request =>
       LunchInfoFetcher.fetchTodaysLunchInfo().map { todaysLunches =>
         Ok(views.html.lunchInfo.todaysLunches(todaysLunches)).withHeaders(noCacheHeaders: _*)

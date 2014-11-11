@@ -77,6 +77,7 @@ class KraftanLunchInfoParserSpec extends Specification {
         meals(0).description must beEqualTo(weekdays(dayIdx) + "-meal1")
         meals(1).description must beEqualTo(weekdays(dayIdx) + "-meal2")
       }
+      true
     }
 
     "Fail to parse menu from html when dates doesn't match" in {
