@@ -87,8 +87,8 @@ class KraftanLunchInfoParserSpec extends Specification {
 
     "Fail on ureasonable html" in {
       val dt = DateTime.parse("2014-11-10T12.00")
-      LantisLunchInfoParser(dt, html("Måndag").toString()) must throwAn("otillförlitligt resultat")
-      LantisLunchInfoParser(dt, html("måndag").toString()) must throwAn("otillförlitligt resultat")
+      parser(dt, html("Måndag").toString()) must throwAn("otillförlitligt resultat")
+      parser(dt, html("måndag").toString()) must throwAn("otillförlitligt resultat")
     }
   }
 }

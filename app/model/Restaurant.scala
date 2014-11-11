@@ -49,7 +49,7 @@ object Restaurant {
 
       Restaurant(4,
         "Värdshuset Kräftan",
-        "http://www.kraftan.nu/",
+        "http://www.kraftan.nu/lunch/",
         None,
         "Kraftan")
     )
