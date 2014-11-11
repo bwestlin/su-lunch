@@ -60,7 +60,7 @@ sealed abstract class LunchInfoParser {
   def apply(day: DateTime, body: String): Seq[Meal] = {
     val meals = parse(day, body)
 
-    if (meals != null && mealResultUnreasonable(meals))
+    if (meals != null && isMealResultUnreasonable(meals))
       throw new Exception("Inhämtningen gav ett otillförlitligt resultat")
 
     meals
@@ -68,7 +68,7 @@ sealed abstract class LunchInfoParser {
 
   protected def parse(day: DateTime, body: String): Seq[Meal]
 
-  private def mealResultUnreasonable(meals: Seq[Meal]) = {
+  protected def isMealResultUnreasonable(meals: Seq[Meal]) = {
     meals.size >= 10 || meals.exists { meal =>
       weekdays.exists(weekday => meal.description.contains(weekday) || meal.description.contains(weekday.toLowerCase))
     }
@@ -227,5 +227,9 @@ object KraftanLunchInfoParser extends LunchInfoParser {
       getLunches(streamLines(dayP))
     }
     else null
+  }
+
+  override protected def isMealResultUnreasonable(meals: Seq[Meal]): Boolean = {
+    super.isMealResultUnreasonable(meals) || meals.length > 2
   }
 }

@@ -27,6 +27,8 @@ class LantisLunchInfoParserSpec extends Specification {
 
   "LantisLunchInfoParser" should {
 
+    val parser = LantisLunchInfoParser
+
     def html(mealNames: Seq[String]) =
       <div class="col-md-3 hors-menu text-center">
         <h2 id="tillmenyn">Dagens lunch Mån. 10/11</h2>
@@ -44,7 +46,7 @@ class LantisLunchInfoParserSpec extends Specification {
     def defaultMealNames(nMeals: Int) = (1 to nMeals).map("Meal" + _)
 
     "Parse menu from html correctly when correct date" in {
-      val meals = LantisLunchInfoParser(DateTime.parse("2014-11-10T12.00"), html(defaultMealNames(3)).toString())
+      val meals = parser(DateTime.parse("2014-11-10T12.00"), html(defaultMealNames(3)).toString())
       meals.length must beEqualTo(3)
       meals(0).description must beEqualTo("Svenska smaker: Meal1")
       meals(1).description must beEqualTo("World food: Meal2")
@@ -52,20 +54,20 @@ class LantisLunchInfoParserSpec extends Specification {
     }
 
     "At maximum parse 3 meals" in {
-      val meals = LantisLunchInfoParser(DateTime.parse("2014-11-10T12.00"), html(defaultMealNames(4)).toString())
+      val meals = parser(DateTime.parse("2014-11-10T12.00"), html(defaultMealNames(4)).toString())
       meals.length must beEqualTo(3)
     }
 
-    "Fail to parse menu from html correctly when dates doesn't match" in {
-      val meals = LantisLunchInfoParser(DateTime.parse("2014-11-11T12.00"), html(defaultMealNames(3)).toString())
+    "Fail to parse menu from html when dates doesn't match" in {
+      val meals = parser(DateTime.parse("2014-11-11T12.00"), html(defaultMealNames(3)).toString())
       meals must beNull // TODO Not null plz
       //meals.length must beEqualTo(0)
     }
 
     "Fail on ureasonable html" in {
       val dt = DateTime.parse("2014-11-10T12.00")
-      LantisLunchInfoParser(dt, html(Seq("Måndag")).toString()) must throwAn("otillförlitligt resultat")
-      LantisLunchInfoParser(dt, html(Seq("måndag")).toString()) must throwAn("otillförlitligt resultat")
+      parser(dt, html(Seq("Måndag")).toString()) must throwAn("otillförlitligt resultat")
+      parser(dt, html(Seq("måndag")).toString()) must throwAn("otillförlitligt resultat")
     }
   }
 }
