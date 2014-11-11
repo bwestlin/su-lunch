@@ -7,26 +7,29 @@ The application is built using **[Play Framework](http://www.playframework.com)*
 Data collecting is done with **[Web scraping](http://en.wikipedia.org/wiki/Web_scraping)** using the **[jsoup](http://jsoup.org/)** HTML Parser.
 
 ## Requirements ##
-The main requirement for running this application is Play Framework v2.2.5, which can be downloaded **[here](http://www.playframework.com/download)**
-Later when referring to ```play``` at the command line this refers to the **play** script in the playframework installation directory.
+The main requirement for running this application is **[SBT](http://www.scala-sbt.org/)** which can be downloaded **[here](http://www.scala-sbt.org/download.html)**
 
 ## Running ##
 The easiest way to run this application is with the following command in the project directory:
 ```
-play run
+sbt run
 ```
 After this the application can be accessed from a web browser at **http://localhost:9000/** however it might take some time initially for the dependencys to resolve.
 
 ## IDE setup for **[IntelliJ IDEA](http://www.jetbrains.com/idea/)**##
-Issue the following command in the project directory:
+Either import the project as an SBT project in IDEA
+
+or
+
+issue the following command in the project directory:
 ```
-play idea
+sbt idea
 ```
-This creates an IntelliJ project which can be opened from inside IntelliJ.
+This creates an IntelliJ project which can be opened from IntelliJ as a regular project.
 
 To run the application during development and make it recompile directly on source-code changes start it with the following command:
 ```
-play ~run
+sbt ~run
 ```
 
 ## Licence ##
