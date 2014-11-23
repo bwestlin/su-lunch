@@ -21,9 +21,22 @@ import org.jsoup.select.Elements
 
 object JsoupExtensions {
 
-  implicit class ElementsOps[A](val elements: Elements) extends AnyVal {
+  implicit class ElementsOps(val elements: Elements) extends AnyVal {
     def firstOpt: Option[Element] = {
       Option(elements.first())
+    }
+  }
+
+  implicit class ElementOps(val element: Element) extends AnyVal {
+    def nextElementSiblings(numSiblings: Int) = {
+      def nextElementSiblingsIter(numLeft: Int, sibling: Element): List[Element] = {
+        if (numLeft <= 0) Nil
+        else {
+          val nextSibling = sibling.nextElementSibling
+          nextSibling :: nextElementSiblingsIter(numLeft - 1, nextSibling)
+        }
+      }
+      nextElementSiblingsIter(numSiblings, element)
     }
   }
 }
