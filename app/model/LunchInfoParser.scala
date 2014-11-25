@@ -202,14 +202,12 @@ object KraftanLunchInfoParser extends LunchInfoParser {
 
     val maybeMeals =
       for {
-        weekTitleElem     <- doc.select(s"p:contains(v.$weekNum)").firstOpt
-        weekdaysContainer <- Option(weekTitleElem.nextElementSibling)
+        weekTitleElem     <- doc.select(s"h2:contains(v.$weekNum)").firstOpt
+        weekdaysContainer <- weekTitleElem.parent.parent.select(s"p:contains(${weekdays.head})").firstOpt.map(_.parent)
         weekDayElem       <- weekdaysContainer.select(s"p:contains($weekday)").firstOpt
-        mealsForDayElem   <- weekDayElem.select(s":contains(**)").firstOpt orElse Option(weekDayElem.nextElementSibling).flatMap(_.select(s":contains(**)").firstOpt)
+        mealsForDay       <- Option(weekDayElem.nextElementSiblings(3).map(_.text).filterNot(_ == "**"))
       } yield {
-        val mealsForDayElemCleaned = mealsForDayElem.clone()
-        mealsForDayElemCleaned.select("strong").remove()
-        mealsForDayElemCleaned.text.split("\\*\\*").toSeq.map(_.trim).map(Meal.apply)
+        mealsForDay.map(Meal.apply)
       }
 
     maybeMeals.orNull
