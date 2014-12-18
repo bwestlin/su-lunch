@@ -6,13 +6,10 @@ This is a simplistic web-application used for aggregating lunch menus in the are
 The application is built using **[Play Framework](http://www.playframework.com)** and written mainly in **[Scala](http://www.scala-lang.org/)**.
 Data collecting is done with **[Web scraping](http://en.wikipedia.org/wiki/Web_scraping)** using the **[jsoup](http://jsoup.org/)** HTML Parser.
 
-## Requirements ##
-The main requirement for running this application is **[SBT](http://www.scala-sbt.org/)** which can be downloaded **[here](http://www.scala-sbt.org/download.html)**
-
 ## Running ##
 The easiest way to run this application is with the following command in the project directory:
 ```
-sbt run
+./activator run
 ```
 After this the application can be accessed from a web browser at **http://localhost:9000/** however it might take some time initially for the dependencys to resolve.
 
@@ -23,13 +20,13 @@ or
 
 issue the following command in the project directory:
 ```
-sbt idea
+./activator idea
 ```
 This creates an IntelliJ project which can be opened from IntelliJ as a regular project.
 
 To run the application during development and make it recompile directly on source-code changes start it with the following command:
 ```
-sbt ~run
+./activator ~run
 ```
 
 ## Licence ##
