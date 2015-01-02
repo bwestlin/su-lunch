@@ -22,8 +22,10 @@ import play.api.cache.Cached
 import play.api.http.MimeTypes
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.Play.current
+import play.api.libs.json.Json
 
 import model.LunchInfoFetcher
+import model.JsonFormats._
 
 object LunchInfo extends Controller {
 
@@ -49,6 +51,14 @@ object LunchInfo extends Controller {
     Action.async { implicit request =>
       LunchInfoFetcher.fetchTodaysLunchInfo().map { todaysLunches =>
         Ok(views.html.lunchInfo.todaysLunches(todaysLunches)).withHeaders(noCacheHeaders: _*)
+      }
+    }
+  }
+
+  def todaysLunchesJson = Cached.status(_ => "todaysLunchesJson", OK, cacheDuration) {
+    Action.async { implicit request =>
+      LunchInfoFetcher.fetchTodaysLunchInfo().map { todaysLunches =>
+        Ok(Json.toJson(todaysLunches)).withHeaders(noCacheHeaders: _*)
       }
     }
   }
