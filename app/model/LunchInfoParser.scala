@@ -21,6 +21,7 @@ import org.jsoup._
 import nodes.Element
 import org.joda.time.DateTime
 import common.JsoupExtensions._
+import common.StringExtensions._
 
 object LunchInfoParser {
 
@@ -121,7 +122,7 @@ object FossilenLunchInfoParser extends LunchInfoParser {
     // Check that the webpage consist of the right week according to today
     val correctWeek = Option(baseElement.select("h2:containsOwn(Meny)").first).map { headerElem =>
       headerElem.text.split(Array(',', '-', ' ')).map(_.trim).toList match {
-        case _ :: _ :: week :: _ if week.toInt == currentWeek => true
+        case _ :: _ :: week :: _ if week.toIntOpt.contains(currentWeek) => true
         case _ => false
       }
     }
