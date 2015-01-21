@@ -92,7 +92,7 @@ object LantisLunchInfoParser extends LunchInfoParser {
 
     val lunchmenulist = doc.select(".hors-menu").first
     val weekday = weekdaysShort(dayDT.dayOfWeek.get - 1)
-    val title = "Dagens lunch " + weekday + ". " + dayDT.toString("dd/MM")
+    val title = "Dagens lunch " + weekday + ". " + dayDT.toString("dd/M")
 
     if (lunchmenulist != null && lunchmenulist.select("h2:containsOwn(" + title + ")").first != null) {
       val types = List("Svenska smaker", "World food", "Healthy")

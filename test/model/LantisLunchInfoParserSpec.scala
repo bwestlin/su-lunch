@@ -26,6 +26,7 @@ import scala.xml._
 class LantisLunchInfoParserSpec extends Specification {
 
   "LantisLunchInfoParser" should {
+    // TODO Test for different date cases like months 1-9, 10-12, all weekdays etc.
 
     val parser = LantisLunchInfoParser
 
