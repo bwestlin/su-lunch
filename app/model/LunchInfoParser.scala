@@ -105,6 +105,26 @@ object LantisLunchInfoParser extends LunchInfoParser {
 }
 
 /**
+ * Function to parse lunch for a given day from restaurant Biofood, see http://www.hors.se/restaurang/jalla-su/
+ */
+object BiofoodLunchInfoParser extends LunchInfoParser {
+
+  override protected def parse(dayDT: DateTime, body: String): Seq[Meal] = {
+    val doc = Jsoup.parse(body)
+
+    val lunchmenulist = doc.select(".hors-menu").first
+    val weekday = weekdaysShort(dayDT.dayOfWeek.get - 1)
+    val title = "Dagens lunch " + weekday + ". " + dayDT.toString("dd/M")
+
+    if (lunchmenulist != null && lunchmenulist.select("h2:containsOwn(" + title + ")").first != null) {
+      lunchmenulist.select(".row .text-left").map { elem =>
+        Meal(elem.text)
+      }
+    } else null
+  }
+}
+
+/**
  * Function to parse all lunches for a given day from restaurant Fossilen, see http://nrm.se/besokmuseet/restaurangfossilen
  */
 object FossilenLunchInfoParser extends LunchInfoParser {
