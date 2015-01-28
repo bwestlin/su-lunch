@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/bwestlin/su-lunch.svg?branch=master)](https://travis-ci.org/bwestlin/su-lunch)
+
 # su-lunch #
 > Dagens luncher - Stockholms Universitet
 
