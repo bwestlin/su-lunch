@@ -28,12 +28,13 @@ class LunchInfoParserSpec extends Specification {
     "Build a map with all LunchInfoParsers mapped to their corresponding name" in {
       val allParsers = LunchInfoParser.allParsers
 
-      allParsers.size must beEqualTo(4)
+      allParsers.size must beEqualTo(5)
 
       allParsers.get("Lantis") must beSome
       allParsers.get("Fossilen") must beSome
       allParsers.get("StoraSkuggan") must beSome
       allParsers.get("Kraftan") must beSome
+      allParsers.get("Biofood") must beSome
     }
   }
 
