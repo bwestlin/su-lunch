@@ -23,3 +23,6 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 TwirlKeys.templateImports ++= Seq(
   "scala.util._"
 )
+
+ScoverageSbtPlugin.ScoverageKeys.coverageExcludedPackages := "<empty>;Global;Routes;controllers.Reverse*;controllers.javascript.*;controllers.ref.*"
+
