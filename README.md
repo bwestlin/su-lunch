@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/bwestlin/su-lunch.svg?branch=master)](https://travis-ci.org/bwestlin/su-lunch)
 [![Coverage Status](https://coveralls.io/repos/bwestlin/su-lunch/badge.svg?branch=master)](https://coveralls.io/r/bwestlin/su-lunch?branch=master)
+[![Codacy Badge](https://www.codacy.com/project/badge/920765af769d48fd8fdb82ac3e0f95ed)](https://www.codacy.com/public/bwestlin/su-lunch)
 
 # su-lunch #
 > Dagens luncher - Stockholms Universitet
