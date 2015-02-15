@@ -27,7 +27,7 @@ import play.api.libs.json.Json
 import model.LunchInfoFetcher
 import model.JsonFormats._
 
-object LunchInfo extends Controller {
+object LunchInfoController extends Controller {
 
   val noCacheHeaders = Seq(
     CACHE_CONTROL -> "no-cache, no-store, must-revalidate",
