@@ -10,7 +10,7 @@ $(function(){
     }
   }
 
-  jsRoutes.controllers.LunchInfo.todaysLunches().ajax({
+  jsRoutes.controllers.LunchInfoController.todaysLunches().ajax({
     success: function(response, status, xhr) {
       $todaysLunches.html(response);
       showTodaysLunches();
