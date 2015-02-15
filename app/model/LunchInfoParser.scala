@@ -168,7 +168,8 @@ object FossilenLunchInfoParser extends LunchInfoParser {
         else {
           // Split meals by html breaking newlines
           val meals = for {
-            mealByBr <- nextElem.html.split("<br />").map(Jsoup.parse(_).text()).toList
+            mealByBr <- nextElem.html.split("<br />").map(Jsoup.parse(_).text().trimWhitespace).toList
+            if mealByBr.nonEmpty
           } yield Meal(mealByBr)
 
           meals ::: getMeals(nextElem.nextElementSibling)
