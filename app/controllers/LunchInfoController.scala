@@ -27,9 +27,11 @@ import play.api.libs.json.Json
 import model.LunchInfoFetcher
 import model.JsonFormats._
 
-object LunchInfoController extends Controller {
+trait LunchInfoController { this: Controller =>
 
-  val noCacheHeaders = Seq(
+  def lunchInfoFetcher = LunchInfoFetcher()
+
+  lazy val noCacheHeaders = Seq(
     CACHE_CONTROL -> "no-cache, no-store, must-revalidate",
     PRAGMA -> "no-cache",
     EXPIRES -> "0"
@@ -49,7 +51,7 @@ object LunchInfoController extends Controller {
 
   def todaysLunches = Cached.status(_ => "todaysLunches", OK, cacheDuration) {
     Action.async { implicit request =>
-      LunchInfoFetcher.fetchTodaysLunchInfo().map { todaysLunches =>
+      lunchInfoFetcher.fetchTodaysLunchInfo().map { todaysLunches =>
         Ok(views.html.lunchInfo.todaysLunches(todaysLunches)).withHeaders(noCacheHeaders: _*)
       }
     }
@@ -57,7 +59,7 @@ object LunchInfoController extends Controller {
 
   def todaysLunchesJson = Cached.status(_ => "todaysLunchesJson", OK, cacheDuration) {
     Action.async { implicit request =>
-      LunchInfoFetcher.fetchTodaysLunchInfo().map { todaysLunches =>
+      lunchInfoFetcher.fetchTodaysLunchInfo().map { todaysLunches =>
         Ok(Json.toJson(todaysLunches)).withHeaders(noCacheHeaders: _*)
       }
     }
@@ -77,3 +79,5 @@ object LunchInfoController extends Controller {
     Ok(Routes.javascriptRouter("jsRoutes")(jsReverseRoutes: _*)).as(MimeTypes.JAVASCRIPT)
   }
 }
+
+object LunchInfoController extends Controller with LunchInfoController

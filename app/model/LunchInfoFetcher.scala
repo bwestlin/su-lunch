@@ -10,10 +10,16 @@ import play.api.Play.current
 
 object LunchInfoFetcher {
 
-  import LunchInfoParser._
-
   type RestaurantWithParser = (Restaurant, LunchInfoParser)
   type RestaurantWithMeals  = (Restaurant, Try[Seq[Meal]])
+
+  def apply() = new LunchInfoFetcher
+}
+
+class LunchInfoFetcher {
+
+  import LunchInfoParser._
+  import LunchInfoFetcher._
 
   /**
    * Get parser for each defined restaurant
@@ -60,5 +66,4 @@ object LunchInfoFetcher {
       lunchInfos
     }
   }
-
 }
