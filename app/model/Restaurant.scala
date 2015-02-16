@@ -16,48 +16,29 @@
 
 package model
 
-case class Restaurant(id: Integer,
+import com.typesafe.config.ConfigRenderOptions
+import play.api.libs.json.Json
+
+import scala.collection.JavaConverters._
+import play.api.Play
+
+case class Restaurant(id: Int,
                       name: String,
                       url: String,
-                      requestHeaders: Option[Seq[(String, String)]],
+                      requestHeaders: Option[Map[String, String]],
                       parser: String) {
 }
 
 object Restaurant {
 
+  implicit val restaurantReads = Json.reads[Restaurant]
+
   def getAll: Seq[Restaurant] = {
-    Seq(
-      Restaurant(1,
-        "Restaurang Lantis",
-        "http://www.hors.se/restaurang/restaurang-lantis/",
-        None,
-        "Lantis"),
 
-      Restaurant(2,
-        "Restaurang Fossilen",
-        "http://nrm.se/besokmuseet/restaurangfossilen",
-        None,
-        "Fossilen"),
-
-      Restaurant(3,
-        "Stora Skuggans Wärdshus",
-        "http://gastrogate.com/restaurang/storaskuggan/page/3",
-        Option(Seq(
-          "User-Agent" -> "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.22 (KHTML, like Gecko) Ubuntu Chromium/25.0.1364.160 Chrome/25.0.1364.160 Safari/537.22"
-        )),
-        "StoraSkuggan"),
-
-      Restaurant(4,
-        "Värdshuset Kräftan",
-        "http://www.kraftan.nu/lunch/",
-        None,
-        "Kraftan"),
-		
-	  Restaurant(5,
-		"Jalla Biofood",
-		"http://www.hors.se/restaurang/jalla-su/",
-		None,
-		"Biofood")
-    )
+    for {
+      restaurantConfig <- Play.current.configuration.underlying.getList("restaurants").asScala.toSeq
+    } yield {
+      Json.parse(restaurantConfig.render(ConfigRenderOptions.concise())).as[Restaurant]
+    }
   }
 }
