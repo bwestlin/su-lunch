@@ -19,13 +19,14 @@ package model
 import org.specs2.mutable._
 import org.specs2.runner._
 import org.junit.runner._
+import play.api.test.WithApplication
 
 @RunWith(classOf[JUnitRunner])
 class RestaurantSpec extends Specification {
 
   "Restaurant" should {
 
-    "Provide a list of all restaurants" in {
+    "Provide a list of all restaurants" in new WithApplication {
       val restaurants = Restaurant.getAll
 
       restaurants.length mustEqual 5
@@ -33,6 +34,7 @@ class RestaurantSpec extends Specification {
       restaurants.forall(_.name.nonEmpty) must beTrue
       restaurants.forall(_.url.nonEmpty) must beTrue
       restaurants.forall(_.parser.nonEmpty) must beTrue
+      restaurants.map(_.parser) mustEqual Seq("Lantis", "Fossilen", "StoraSkuggan", "Kraftan", "Biofood")
       restaurants.find(_.id == 3).get.requestHeaders.get.toMap.apply("User-Agent") must contain("Ubuntu Chromium")
     }
   }

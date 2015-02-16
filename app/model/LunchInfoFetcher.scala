@@ -44,7 +44,7 @@ class LunchInfoFetcher {
     val futureLunchInfos = restaurantsWithParser.map { case (restaurant, parser) =>
 
       val holder = WS.url(restaurant.url)
-        .withHeaders(restaurant.requestHeaders.getOrElse(Nil): _*)
+        .withHeaders(restaurant.requestHeaders.map(_.toSeq).getOrElse(Nil): _*)
         .withRequestTimeout(10 * 1000)
 
       holder.get().map { response =>
