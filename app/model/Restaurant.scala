@@ -53,11 +53,11 @@ object Restaurant {
         None,
         "Kraftan"),
 		
-	  Restaurant(5,
-		"Jalla Biofood",
-		"http://www.hors.se/restaurang/jalla-su/",
-		None,
-		"Biofood")
+      Restaurant(5,
+        "Jalla Biofood",
+        "http://www.hors.se/restaurang/jalla-su/",
+        None,
+        "Biofood")
     )
   }
 }
