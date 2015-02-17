@@ -34,7 +34,7 @@ class LunchInfoFetcherSpec extends Specification {
       restaurantWithParser foreach { case (_, parser) =>
           parser must not beNull
       }
-      restaurantWithParser.length mustEqual 5
+      restaurantWithParser.length mustEqual 4
     }
   }
 }
