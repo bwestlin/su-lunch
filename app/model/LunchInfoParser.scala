@@ -182,36 +182,6 @@ object FossilenLunchInfoParser extends LunchInfoParser {
 }
 
 /**
- * Function to parse all lunches for a given day from restaurant Stora Skuggan, see http://gastrogate.com/restaurang/storaskuggan/page/3
- */
-object StoraSkugganLunchInfoParser extends LunchInfoParser {
-
-  override protected def parse(dayDT: DateTime, body: String): Seq[Meal] = {
-    val doc = Jsoup.parse(body)
-
-    val weekday = weekdays(dayDT.dayOfWeek.get - 1)
-
-    val dayTd = doc.select("td:containsOwn(" + weekday + ")").first
-    if (dayTd != null) {
-      val next = dayTd.parent.nextElementSibling
-
-      def getRows(row: Element): List[Meal] = {
-        val tds = if (row != null) row.select("td") else null
-        val firstTd = if (tds != null) tds.first else null
-
-        if (firstTd == null || firstTd.className == "menu_header") List()
-        else {
-          Meal(firstTd.text) :: getRows(row.nextElementSibling)
-        }
-      }
-
-      getRows(next)
-    }
-    else null
-  }
-}
-
-/**
  * Function to parse all lunches for a given day from restaurant Kräftan, see http://www.kraftan.nu/
  */
 object KraftanLunchInfoParser extends LunchInfoParser {

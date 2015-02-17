@@ -29,13 +29,12 @@ class RestaurantSpec extends Specification {
     "Provide a list of all restaurants" in new WithApplication {
       val restaurants = Restaurant.getAll
 
-      restaurants.length mustEqual 5
-      restaurants.map(_.id).toSet mustEqual (1 to 5).toSet
+      restaurants.length mustEqual 4
+      restaurants.map(_.id).toSet mustEqual (1 to 5).filterNot(_ == 3).toSet
       restaurants.forall(_.name.nonEmpty) must beTrue
       restaurants.forall(_.url.nonEmpty) must beTrue
       restaurants.forall(_.parser.nonEmpty) must beTrue
-      restaurants.map(_.parser) mustEqual Seq("Lantis", "Fossilen", "StoraSkuggan", "Kraftan", "Biofood")
-      restaurants.find(_.id == 3).get.requestHeaders.get.toMap.apply("User-Agent") must contain("Ubuntu Chromium")
+      restaurants.map(_.parser) mustEqual Seq("Lantis", "Fossilen", "Kraftan", "Biofood")
     }
   }
 }
