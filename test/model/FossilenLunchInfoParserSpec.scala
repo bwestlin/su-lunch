@@ -26,45 +26,9 @@ import scala.xml._
 class FossilenLunchInfoParserSpec extends Specification {
 
   "FossilenLunchInfoParser" should {
+    import FossilenFixtures._
 
     val parser = FossilenLunchInfoParser
-
-    def html(mealName: String = "meal") =
-      <div class="sv-text-portlet-content">
-        <h2 class="h2" id="h-Menyvecka7915februari">Meny vecka 7,&nbsp;9-15 februari</h2>
-        <h3 class="h3" id="h-Mandag">Måndag</h3>
-        <p class="brodtext">mon-{mealName}1&nbsp;</p>
-        <p class="brodtext">mon-{mealName}2</p>
-        <p class="brodtext">mon-{mealName}3&nbsp;&nbsp; </p>
-        <p class="brodtext">mon-{mealName}4</p>
-        <h3 class="h3" id="h-Tisdag">Tisdag</h3>
-        <p class="brodtext">tue-{mealName}1</p>
-        <p class="brodtext">tue-{mealName}2</p>
-        <p class="brodtext">tue-{mealName}3</p>
-        <p class="brodtext">tue-{mealName}4</p>
-        <h3 class="h3" id="h-Onsdag">Onsdag</h3>
-        <p class="brodtext">wed-{mealName}1</p>
-        <p class="brodtext">wed-{mealName}2</p>
-        <p class="brodtext">wed-{mealName}3</p>
-        <p class="brodtext">wed-{mealName}4</p>
-        <h3 class="h3" id="h-Torsdag">Torsdag</h3>
-        <p class="brodtext">thu-{mealName}1&nbsp;</p>
-        <p class="brodtext">thu-{mealName}2&nbsp;</p>
-        <p class="brodtext">thu-{mealName}3&nbsp;&nbsp; </p>
-        <p class="brodtext">thu-{mealName}4&nbsp;</p>
-        <h3 class="h3" id="h-Fredag">Fredag</h3>
-        <p class="brodtext">fri-{mealName}1</p>
-        <p class="brodtext">fri-{mealName}2</p>
-        <p class="brodtext">fri-{mealName}3</p>
-        <p class="brodtext">fri-{mealName}4</p>
-        <h3 class="h3" id="h-Lordagsondag">Lördag, söndag</h3>
-        <p class="brodtext">
-          sunsat-{mealName}1 <br/><br/>
-          sunsat-{mealName}2 <br/><br/>
-          sunsat-{mealName}3 <br/><br/>
-          sunsat-{mealName}4
-        </p>
-      </div>
 
     val weekdays = Seq("mon", "tue", "wed", "thu", "fri", "sunsat", "sunsat")
 

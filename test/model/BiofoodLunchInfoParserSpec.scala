@@ -25,25 +25,10 @@ import org.specs2.runner._
 class BiofoodLunchInfoParserSpec extends Specification {
 
   "BiofoodLunchInfoParser" should {
+    import BiofoodFixtures._
     // TODO Test for different date cases like months 1-9, 10-12, all weekdays etc.
 
     val parser = BiofoodLunchInfoParser
-
-    def html(mealNames: Seq[String]) =
-      <div class="col-md-3 hors-menu text-center">
-        <h2 id="tillmenyn">Dagens lunch Mån. 10/11</h2>
-        {
-          mealNames.map { name =>
-            <div class="row">
-              <div class="col-xs-2"></div>
-              <div class="col-xs-10 text-left">{name}</div>
-            </div>
-          }
-        }
-        <p class="small"></p>
-      </div>
-
-    def defaultMealNames(nMeals: Int) = (1 to nMeals).map("Meal" + _)
 
     "Parse menu from html correctly when correct date" in {
       val meals = parser(DateTime.parse("2014-11-10T12.00"), html(defaultMealNames(3)).toString())
