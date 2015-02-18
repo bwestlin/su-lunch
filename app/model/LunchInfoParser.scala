@@ -88,8 +88,6 @@ sealed abstract class LunchInfoParser {
 
   protected def weekdays = List("Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag")
   protected def weekdaysShort = List("Mån", "Tis", "Ons", "Tors", "Fre", "Lör", "Sön")
-
-  protected def months = List("Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti", "September", "Oktober", "November", "December")
 }
 
 /**
