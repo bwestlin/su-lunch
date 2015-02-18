@@ -52,14 +52,13 @@ class LunchInfoFetcherSpec extends PlaySpecification with Mockito {
           wsResp.body returns html
           Future.successful(wsResp)
         }
-        override def getTodayDateTime: DateTime = DateTime.parse("2015-02-09T12.00")
       }
 
       val restaurantWithParser = Seq(
         (Restaurant(1, "Fossilen", "http://fossilen", None, "Fossilen"), getParser("Fossilen").get),
         (Restaurant(2, "Kraftan", "http://kraftan", None, "Kraftan"), getParser("Kraftan").get)
       )
-      val futureLunchInfo = lunchInfoFetcher.fetchTodaysLunchInfo(restaurantWithParser)
+      val futureLunchInfo = lunchInfoFetcher.fetchTodaysLunchInfo(DateTime.parse("2015-02-09T12.00"), restaurantWithParser)
       val lunchInfo = await(futureLunchInfo)
 
       lunchInfo.length mustEqual 2
@@ -81,13 +80,12 @@ class LunchInfoFetcherSpec extends PlaySpecification with Mockito {
           wsResp.body returns BiofoodFixtures.html(BiofoodFixtures.defaultMealNames(11)).toString()
           Future.successful(wsResp)
         }
-        override def getTodayDateTime: DateTime = DateTime.parse("2014-11-10T12.00")
       }
 
       val restaurantWithParser = Seq(
         (Restaurant(1, "Biofood", "http://biofood", None, "Biofood"), getParser("Biofood").get)
       )
-      val futureLunchInfo = lunchInfoFetcher.fetchTodaysLunchInfo(restaurantWithParser)
+      val futureLunchInfo = lunchInfoFetcher.fetchTodaysLunchInfo(DateTime.parse("2014-11-10T12.00"), restaurantWithParser)
       val lunchInfo = await(futureLunchInfo)
 
       lunchInfo.length mustEqual 1

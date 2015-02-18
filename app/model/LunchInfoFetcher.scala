@@ -42,16 +42,10 @@ class LunchInfoFetcher {
   }
 
   /**
-   * Get the date and time reflecting the current time
-   */
-  def getTodayDateTime = DateTime.now()
-
-  /**
    * Fetch lunch info for today from all defined restaurants
    */
-  def fetchTodaysLunchInfo(restaurantsWithParser: Seq[RestaurantWithParser] = allRestaurantsWithParser): Future[Seq[RestaurantWithMeals]] = {
-
-    val todayDT = getTodayDateTime
+  def fetchTodaysLunchInfo(todayDT: DateTime = DateTime.now(),
+                           restaurantsWithParser: Seq[RestaurantWithParser] = allRestaurantsWithParser): Future[Seq[RestaurantWithMeals]] = {
 
     // Fetch lunch info from each restaurant and parse in parallel
     val futureLunchInfos = restaurantsWithParser.map { case (restaurant, parser) =>

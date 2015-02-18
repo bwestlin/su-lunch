@@ -48,7 +48,7 @@ class LunchInfoControllerSpec extends PlaySpecification with Mockito {
       (restaurant2, Success(Seq(Meal("meal2_1"), Meal("meal2_2"))))
     )
 
-    mockedLunchInfoFetcher.fetchTodaysLunchInfo(any) returns Future.successful(lunchInfoResult)
+    mockedLunchInfoFetcher.fetchTodaysLunchInfo(any, any) returns Future.successful(lunchInfoResult)
   }
 
   "LunchInfoController" should {
