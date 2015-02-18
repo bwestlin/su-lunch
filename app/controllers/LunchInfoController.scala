@@ -29,7 +29,7 @@ import model.JsonFormats._
 
 trait LunchInfoController { this: Controller =>
 
-  def lunchInfoFetcher = LunchInfoFetcher()
+  def lunchInfoFetcher: LunchInfoFetcher
 
   lazy val noCacheHeaders = Seq(
     CACHE_CONTROL -> "no-cache, no-store, must-revalidate",
@@ -80,4 +80,6 @@ trait LunchInfoController { this: Controller =>
   }
 }
 
-object LunchInfoController extends Controller with LunchInfoController
+object LunchInfoController extends Controller with LunchInfoController {
+  override def lunchInfoFetcher: LunchInfoFetcher = LunchInfoFetcher()
+}
