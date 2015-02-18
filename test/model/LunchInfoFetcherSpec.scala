@@ -92,5 +92,25 @@ class LunchInfoFetcherSpec extends PlaySpecification with Mockito {
       val (_, lunchInfo1) = lunchInfo(0)
       lunchInfo1 must beFailedTry
     }
+
+    "Handle fetch failures using Try's" in new WithApplication {
+      import LunchInfoParser._
+
+      val lunchInfoFetcher = new LunchInfoFetcher {
+        override def fetchUrl(url: String, requestHeaders: Option[Map[String, String]], timeoutSec: Int): Future[WSResponse] = {
+          Future.failed(new Exception("Something went wrong"))
+        }
+      }
+
+      val restaurantWithParser = Seq(
+        (Restaurant(1, "Biofood", "http://biofood", None, "Biofood"), getParser("Biofood").get)
+      )
+      val futureLunchInfo = lunchInfoFetcher.fetchTodaysLunchInfo(DateTime.parse("2014-11-10T12.00"), restaurantWithParser)
+      val lunchInfo = await(futureLunchInfo)
+
+      lunchInfo.length mustEqual 1
+      val (_, lunchInfo1) = lunchInfo(0)
+      lunchInfo1 must beFailedTry.withThrowable[Exception]("Something went wrong")
+    }
   }
 }
