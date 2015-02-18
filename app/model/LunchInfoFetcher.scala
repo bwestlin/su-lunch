@@ -5,7 +5,7 @@ import play.api.Logger
 import play.api.libs.concurrent.Execution.Implicits._
 import scala.concurrent.Future
 import scala.util.{Failure, Try}
-import play.api.libs.ws.WS
+import play.api.libs.ws.{WSResponse, WS}
 import play.api.Play.current
 
 object LunchInfoFetcher {
@@ -25,29 +25,38 @@ class LunchInfoFetcher {
    * Get parser for each defined restaurant
    */
   def allRestaurantsWithParser: Seq[RestaurantWithParser] = Restaurant.getAll.map { restaurant =>
-    val maybeParser = allParsers.find { case (name, _) =>
-      name == restaurant.parser
-    }
-    maybeParser.map { case (_, parser) =>
+    val maybeParser = getParser(restaurant.parser)
+    maybeParser.map { parser =>
       (restaurant, parser)
     }
   }.flatten
+
+  /**
+   * Fetch data using GET request for a given url
+   */
+  def fetchUrl(url: String, requestHeaders: Option[Map[String, String]] = None, timeoutSec: Int = 10): Future[WSResponse] = {
+    WS.url(url)
+      .withHeaders(requestHeaders.map(_.toSeq).getOrElse(Nil): _*)
+      .withRequestTimeout(timeoutSec * 1000)
+      .get()
+  }
+
+  /**
+   * Get the date and time reflecting the current time
+   */
+  def getTodayDateTime = DateTime.now()
 
   /**
    * Fetch lunch info for today from all defined restaurants
    */
   def fetchTodaysLunchInfo(restaurantsWithParser: Seq[RestaurantWithParser] = allRestaurantsWithParser): Future[Seq[RestaurantWithMeals]] = {
 
-    val todayDT = DateTime.now()
+    val todayDT = getTodayDateTime
 
     // Fetch lunch info from each restaurant and parse in parallel
     val futureLunchInfos = restaurantsWithParser.map { case (restaurant, parser) =>
 
-      val holder = WS.url(restaurant.url)
-        .withHeaders(restaurant.requestHeaders.map(_.toSeq).getOrElse(Nil): _*)
-        .withRequestTimeout(10 * 1000)
-
-      holder.get().map { response =>
+      fetchUrl(restaurant.url, restaurant.requestHeaders).map { response =>
         (restaurant, Try(parser(todayDT, response.body)))
       } recover {
         case e => (restaurant, Failure(e))

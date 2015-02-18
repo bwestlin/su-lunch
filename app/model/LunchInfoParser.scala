@@ -49,6 +49,16 @@ object LunchInfoParser {
       else None
     }.toMap
   }
+
+  def getParser(name: String): Option[LunchInfoParser] = {
+    allParsers
+      .find { case (parserName, _) =>
+        parserName == name
+      }
+      .map { case (_, parser) =>
+        parser
+      }
+  }
 }
 
 /**
