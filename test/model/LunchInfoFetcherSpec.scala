@@ -64,11 +64,11 @@ class LunchInfoFetcherSpec extends PlaySpecification with Mockito {
       lunchInfo.length mustEqual 2
       val (_, lunchInfo1) = lunchInfo(0)
       lunchInfo1 must beSuccessfulTry
-      lunchInfo1.get.length mustEqual 4
-      lunchInfo1.get.map(_.description).toSet mustEqual (1 to 4).map("mon-meal" + _).toSet
+      lunchInfo1.getOrElse(Nil).length mustEqual 4
+      lunchInfo1.getOrElse(Nil).map(_.description).toSet mustEqual (1 to 4).map("mon-meal" + _).toSet
       val (_, lunchInfo2) = lunchInfo(1)
       lunchInfo2 must beSuccessfulTry
-      lunchInfo2.get must beEmpty
+      lunchInfo2.getOrElse(Nil) must beEmpty
     }
 
     "Handle parsing failures using Try's" in new WithApplication {
@@ -103,7 +103,7 @@ class LunchInfoFetcherSpec extends PlaySpecification with Mockito {
       }
 
       val restaurantWithParser = Seq(
-        (Restaurant(1, "Biofood", "http://biofood", None, "Biofood"), getParser("Biofood").get)
+        (Restaurant(1, "Biofood", "http://biofood", None, "Biofood"), getParser("Biofood").orNull)
       )
       val futureLunchInfo = lunchInfoFetcher.fetchTodaysLunchInfo(DateTime.parse("2014-11-10T12.00"), restaurantWithParser)
       val lunchInfo = await(futureLunchInfo)
