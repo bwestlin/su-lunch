@@ -23,8 +23,8 @@ object JsonFormats {
       val (restaurant, mealsTry) = restaurantWithMeals
       val mealsOrError =
         mealsTry match {
+          case Success(meals: Seq[Meal]) if meals.isEmpty => Nil
           case Success(meals: Seq[Meal]) => Seq("meals" -> Json.toJson(meals))
-          case Success(_) => Nil
           case Failure(e) => Seq("error" -> JsString(e.getMessage))
         }
 

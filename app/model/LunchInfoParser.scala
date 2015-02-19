@@ -72,7 +72,7 @@ sealed abstract class LunchInfoParser {
   def apply(day: DateTime, body: String): Seq[Meal] = {
     val meals = parse(day, body)
 
-    if (meals != null && isMealResultUnreasonable(meals))
+    if (Option(meals).nonEmpty && isMealResultUnreasonable(meals))
       throw new Exception("Inhämtningen gav ett otillförlitligt resultat")
 
     meals
@@ -98,17 +98,23 @@ object LantisLunchInfoParser extends LunchInfoParser {
   override protected def parse(dayDT: DateTime, body: String): Seq[Meal] = {
     val doc = Jsoup.parse(body)
 
-    val lunchmenulist = doc.select(".hors-menu").first
+    val maybeLunchmenulist = doc.select(".hors-menu").firstOpt
     val weekday = weekdaysShort(dayDT.dayOfWeek.get - 1)
     val title = "Dagens lunch " + weekday + ". " + dayDT.toString("dd/M")
 
-    if (lunchmenulist != null && lunchmenulist.select("h2:containsOwn(" + title + ")").first != null) {
-      val types = List("Svenska smaker", "World food", "Healthy")
+    val maybeLunches =
+      for {
+        lunchmenulist <- maybeLunchmenulist
+        _             <- lunchmenulist.select("h2:containsOwn(" + title + ")").firstOpt
+      } yield {
+        val types = List("Svenska smaker", "World food", "Healthy")
 
-      lunchmenulist.select(".row .text-left").zip(types).map { elem =>
-        Meal(elem._2 + ": " + elem._1.text)
+        lunchmenulist.select(".row .text-left").zip(types).map { elem =>
+          Meal(elem._2 + ": " + elem._1.text)
+        }
       }
-    } else null
+
+    maybeLunches.getOrElse(Nil)
   }
 }
 
@@ -120,15 +126,21 @@ object BiofoodLunchInfoParser extends LunchInfoParser {
   override protected def parse(dayDT: DateTime, body: String): Seq[Meal] = {
     val doc = Jsoup.parse(body)
 
-    val lunchmenulist = doc.select(".hors-menu").first
+    val maybeLunchmenulist = doc.select(".hors-menu").firstOpt
     val weekday = weekdaysShort(dayDT.dayOfWeek.get - 1)
     val title = "Dagens lunch " + weekday + ". " + dayDT.toString("dd/M")
 
-    if (lunchmenulist != null && lunchmenulist.select("h2:containsOwn(" + title + ")").first != null) {
-      lunchmenulist.select(".row .text-left").map { elem =>
-        Meal(elem.text)
+    val maybeLunches =
+      for {
+        lunchmenulist <- maybeLunchmenulist
+        _             <- lunchmenulist.select("h2:containsOwn(" + title + ")").firstOpt
+      } yield {
+        lunchmenulist.select(".row .text-left").map { elem =>
+          Meal(elem.text)
+        }
       }
-    } else null
+
+    maybeLunches.getOrElse(Nil)
   }
 }
 
@@ -148,44 +160,50 @@ object FossilenLunchInfoParser extends LunchInfoParser {
     val baseElement = doc.select(".sv-text-portlet-content")
 
     // Check that the webpage consist of the right week according to today
-    val correctWeek = Option(baseElement.select("h2:containsOwn(Meny)").first).map { headerElem =>
+    val maybeCorrectWeek = baseElement.select("h2:containsOwn(Meny)").firstOpt.flatMap { headerElem =>
       headerElem.text.split(Array(',', '-', ' ')).map(_.trim).toList match {
-        case _ :: _ :: week :: _ if week.toIntOpt.contains(currentWeek) => true
-        case _ => false
+        case _ :: _ :: week :: _ if week.toIntOpt.contains(currentWeek) => Some(week)
+        case _ => None
       }
     }
 
-    val dayH3 = baseElement.select("h3:containsOwn(" + weekday + ")").first
+    val maybeDayH3 = baseElement.select("h3:containsOwn(" + weekday + ")").firstOpt
 
-    if (correctWeek.getOrElse(false) && dayH3 != null) {
-      val next = dayH3.nextElementSibling
+    val maybeLunches =
+      for {
+        _     <- maybeCorrectWeek
+        dayH3 <- maybeDayH3
+      } yield {
+        val next = Option(dayH3.nextElementSibling)
 
-      /*
-      This has to be thought out a little better
-      def splitByCapitalLetters(text: String): List[String] = {
-        if (text == null || text.length == 0) List()
-        else {
-          val capitalLetterPart = text.take(1) + text.drop(1).takeWhile(!_.isUpper)
-          capitalLetterPart :: splitByCapitalLetters(text.drop(capitalLetterPart.length))
+        /*
+        This has to be thought out a little better
+        def splitByCapitalLetters(text: String): List[String] = {
+          if (text == null || text.length == 0) List()
+          else {
+            val capitalLetterPart = text.take(1) + text.drop(1).takeWhile(!_.isUpper)
+            capitalLetterPart :: splitByCapitalLetters(text.drop(capitalLetterPart.length))
+          }
         }
-      }
-      */
+        */
 
-      def getMeals(nextElem: Element): List[Meal] = {
-        if (nextElem == null || nextElem.tagName != "p") List()
-        else {
-          // Split meals by html breaking newlines
-          val meals = for {
-            mealByBr <- nextElem.html.split("<br />").map(Jsoup.parse(_).text().trimWhitespace).toList
-            if mealByBr.nonEmpty
-          } yield Meal(mealByBr)
+        def getMeals(nextElem: Option[Element]): List[Meal] = nextElem match {
+          case None => Nil
+          case Some(elem) if elem.tagName != "p" => Nil
+          case Some(elem) => {
+            // Split meals by html breaking newlines
+            val meals = for {
+              mealByBr <- elem.html.split("<br />").map(Jsoup.parse(_).text().trimWhitespace).toList
+              if mealByBr.nonEmpty
+            } yield Meal(mealByBr)
 
-          meals ::: getMeals(nextElem.nextElementSibling)
+            meals ::: getMeals(Option(elem.nextElementSibling))
+          }
         }
+        getMeals(next)
       }
-      getMeals(next)
-    }
-    else null
+
+    maybeLunches.getOrElse(Nil)
   }
 }
 
@@ -210,7 +228,7 @@ object KraftanLunchInfoParser extends LunchInfoParser {
         mealsForDay.map(Meal.apply)
       }
 
-    maybeMeals.orNull
+    maybeMeals.getOrElse(Nil)
   }
 
   override protected def isMealResultUnreasonable(meals: Seq[Meal]): Boolean = {

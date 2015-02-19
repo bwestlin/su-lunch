@@ -67,7 +67,7 @@ trait LunchInfoController { this: Controller =>
 
   val jsReverseRoutes = {
     val jsRoutesClass = classOf[routes.javascript]
-    val controllers = jsRoutesClass.getFields.map(_.get(null))
+    val controllers = jsRoutesClass.getFields.map(_.get(None.orNull))
     controllers.flatMap { controller =>
       controller.getClass.getDeclaredMethods.map { action =>
         action.invoke(controller).asInstanceOf[play.core.Router.JavascriptReverseRoute]

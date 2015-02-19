@@ -44,8 +44,7 @@ class KraftanLunchInfoParserSpec extends Specification {
 
     "Fail to parse menu from html when dates doesn't match" in {
       val meals = parser(DateTime.parse("2014-11-10T12.00"), html().toString())
-      meals must beNull // TODO Not null plz
-      //meals.length must beEqualTo(0)
+      meals must beEmpty
     }
 
     "Fail on ureasonable html" in {

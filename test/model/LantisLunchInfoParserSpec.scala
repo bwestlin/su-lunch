@@ -46,8 +46,7 @@ class LantisLunchInfoParserSpec extends Specification {
 
     "Fail to parse menu from html when dates doesn't match" in {
       val meals = parser(DateTime.parse("2014-11-11T12.00"), html(defaultMealNames(3)).toString())
-      meals must beNull // TODO Not null plz
-      //meals.length must beEqualTo(0)
+      meals must beEmpty
     }
 
     "Fail on ureasonable html" in {

@@ -68,7 +68,7 @@ class LunchInfoFetcherSpec extends PlaySpecification with Mockito {
       lunchInfo1.get.map(_.description).toSet mustEqual (1 to 4).map("mon-meal" + _).toSet
       val (_, lunchInfo2) = lunchInfo(1)
       lunchInfo2 must beSuccessfulTry
-      lunchInfo2.get must beNull // TODO Get rid of null
+      lunchInfo2.get must beEmpty
     }
 
     "Handle parsing failures using Try's" in new WithApplication {
