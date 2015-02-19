@@ -48,7 +48,7 @@ class TodaysLunchesSpec extends Specification {
     "Render empty list of meals correctly" in {
       val restaurant = Restaurant(1, "Restaurant", "http://restaurant/", None, "Restaurant")
       val lunches: Seq[(Restaurant, Try[Seq[model.Meal]])] = Seq(
-        (restaurant, Success(null))
+        (restaurant, Success(Nil))
       )
       val html = views.html.lunchInfo.todaysLunches(lunches).toString()
       val doc = Jsoup.parse(html)

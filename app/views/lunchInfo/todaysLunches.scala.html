@@ -23,6 +23,9 @@
   <h4><a href="@restaurant.url"><i class="icon-home"></i> @restaurant.name</a></h4>
 
   @meals match {
+    case Success(meals: Seq[Meal]) if meals.isEmpty => {
+      <div class="">Inga luncher funna.</div>
+    }
     case Success(meals: Seq[Meal]) => {
 
       <ul class="meals">
@@ -30,9 +33,6 @@
         <li>@meal.description</li>
         }
       </ul>
-    }
-    case Success(_) => {
-      <div class="">Inga luncher funna.</div>
     }
     case Failure(ex) => {
       <div class="alert alert-error">

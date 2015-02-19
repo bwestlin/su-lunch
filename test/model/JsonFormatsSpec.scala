@@ -40,7 +40,7 @@ class JsonFormatsSpec extends Specification {
     "Generate correct json for restaurants and no meals" in {
       val restaurant = Restaurant(1, "Restaurant", "http://restaurant/", None, "Restaurant")
       val lunches: Seq[(Restaurant, Try[Seq[model.Meal]])] = Seq(
-        (restaurant, Success(null))
+        (restaurant, Success(Nil))
       )
 
       Json.toJson(lunches).toString mustEqual "[{\"restaurant\":{\"id\":\"1\",\"name\":\"Restaurant\",\"url\":\"http://restaurant/\"}}]"
