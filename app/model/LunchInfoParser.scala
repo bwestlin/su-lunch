@@ -33,7 +33,7 @@ object LunchInfoParser {
 
     val lunchInfoParserClass = classOf[LunchInfoParser]
     val rootMirror = universe.runtimeMirror(lunchInfoParserClass.getClassLoader)
-    var lunchInfoParserClassSymbol = rootMirror.classSymbol(lunchInfoParserClass)
+    val lunchInfoParserClassSymbol = rootMirror.classSymbol(lunchInfoParserClass)
 
     // For some unknown reason this has to be done to make it work
     rootMirror.reflectClass(lunchInfoParserClassSymbol)
