@@ -13,7 +13,7 @@ body {
 #header h3 {
   color: white;
   text-shadow: 0 1px 3px rgba(0, 0, 0, .4), 0 0 30px rgba(0, 0, 0, .075);
-  margin: 0px;
+  margin: 0;
   font-size: 20px;
   line-height: 24px;
 }
@@ -34,7 +34,7 @@ body {
 #footer {
   color: #606060;
   font-size: 10px;
-  text-shadow: 1px 1px 0px rgba(255, 255, 255, .6), 0 0 6px rgba(255, 255, 255, 1);
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, .6), 0 0 6px rgba(255, 255, 255, 1);
   text-align: right;
   margin-bottom: 50px;
 }
@@ -79,11 +79,8 @@ ul.meals {
 
 ul.meals > li {
   display: block;
-  padding-left: 12px;
-  padding-right: 12px;
+  padding: 8px 12px 8px 12px;
   line-height: 20px;
-  padding-bottom: 8px;
-  padding-top: 8px;
   margin-right: 0;
   margin-bottom: -2px;
   border: 2px solid #03c3dd;
@@ -112,10 +109,6 @@ ul.meals > li:last-child {
   border-bottom-left-radius: 4px;
 }
 
-ul.meals > li:hover {
-  /*background-color: #EEEEEE;*/
-}
-
 div.alert-error {
   padding-left: 30px;
   position: relative;
@@ -131,13 +124,11 @@ div.alert-error > i {
 @-webkit-keyframes rotate { from { -webkit-transform: rotate(0deg); } to { -webkit-transform: rotate(360deg); } }
 @-moz-keyframes rotate { from { -moz-transform: rotate(0deg); } to { -moz-transform: rotate(360deg); } }
 @-o-keyframes rotate { from { -o-transform: rotate(0deg); } to { -o-transform: rotate(360deg); } }
-@-ms-keyframes rotate { from { -ms-transform: rotate(0deg); } to { -ms-transform: rotate(360deg); } }
 @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 .rotate {
   -webkit-animation-name: rotate; -webkit-animation-duration: 4s; -webkit-animation-iteration-count: infinite; -webkit-animation-timing-function: linear;
   -moz-animation-name: rotate; -moz-animation-duration: 4s; -moz-animation-iteration-count: infinite; -moz-animation-timing-function: linear;
   -o-animation-name: rotate; -o-animation-duration: 4s; -o-animation-iteration-count: infinite; -o-animation-timing-function: linear;
-  -ms-animation-name: rotate; -ms-animation-duration: 4s; -ms-animation-iteration-count: infinite; -ms-animation-timing-function: linear;
   animation-name: rotate; animation-duration: 4s; animation-iteration-count: infinite; animation-timing-function: linear;
 }
 

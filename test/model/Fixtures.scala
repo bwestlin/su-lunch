@@ -65,16 +65,11 @@ object KraftanFixtures {
     <div class="post-content no-thumbnail">
       <div class="post-info top">
         <span class="post-type-icon-wrap"><span class="post-type-icon"></span></span>
-        <span class="post-date">
-          16 november, 2014
-        </span>
-        <span class="no-caps post-autor">
-          &nbsp;by  <a href="http://www.kraftan.nu/author/kraftan/" title="Inlägg av kraftan" rel="author">kraftan</a>			</span>
+        <span class="post-date">16 november, 2014</span>
+        <span class="no-caps post-autor">&nbsp;by  <a href="http://www.kraftan.nu/author/kraftan/" title="Inlägg av kraftan" rel="author">kraftan</a></span>
       </div>
       <div class="post-title-wrapper">
-        <h2 class="post-title">
-          <a href="http://www.kraftan.nu/menyer/lunchmeny-v-47-2/">Lunchmeny v.47</a>
-        </h2>
+        <h2 class="post-title"><a href="http://www.kraftan.nu/menyer/lunchmeny-v-47-2/">Lunchmeny v.47</a></h2>
       </div>
       <div class="clear"></div>
       <div class="post-content-content">
@@ -107,12 +102,8 @@ object KraftanFixtures {
         <div class="clear"></div>
         <div class="post-info bottom">
           <span class="post-type-icon-wrap"><span class="post-type-icon"></span></span>
-          <span class="no-caps">
-            in			</span><a href="http://www.kraftan.nu/category/menyer/" rel="category tag">Menyer</a>
-          <span class="comments-number">
-            <a href="http://www.kraftan.nu/menyer/lunchmeny-v-47-2/#comments">
-              0				<span class="no-caps">comments</span></a>
-          </span>
+          <span class="no-caps">in</span><a href="http://www.kraftan.nu/category/menyer/" rel="category tag">Menyer</a>
+          <span class="comments-number"><a href="http://www.kraftan.nu/menyer/lunchmeny-v-47-2/#comments">0<span class="no-caps">comments</span></a></span>
         </div>
         <div class="clear"></div>
       </div>

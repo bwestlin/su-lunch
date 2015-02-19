@@ -27,7 +27,7 @@ import play.api.libs.json.Json
 import model.LunchInfoFetcher
 import model.JsonFormats._
 
-trait LunchInfoController { this: Controller =>
+trait LunchInfoController { self: Controller =>
 
   def lunchInfoFetcher: LunchInfoFetcher
 

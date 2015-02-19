@@ -1,12 +1,16 @@
 package model
 
-import org.joda.time.{Period, DateTime}
+import org.joda.time.DateTime
 import play.api.Logger
 import play.api.libs.concurrent.Execution.Implicits._
 import scala.concurrent.Future
 import scala.util.{Failure, Try}
 import play.api.libs.ws.{WSResponse, WS}
 import play.api.Play.current
+
+import LunchInfoParser._
+import LunchInfoFetcher._
+
 
 object LunchInfoFetcher {
 
@@ -17,9 +21,6 @@ object LunchInfoFetcher {
 }
 
 class LunchInfoFetcher {
-
-  import LunchInfoParser._
-  import LunchInfoFetcher._
 
   /**
    * Get parser for each defined restaurant
