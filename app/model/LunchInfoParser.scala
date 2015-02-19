@@ -154,7 +154,6 @@ object FossilenLunchInfoParser extends LunchInfoParser {
 
     val weekStartDate = dayDT.withDayOfWeek(1)
     val currentWeek = weekStartDate.weekOfWeekyear().get()
-
     val weekday = weekdays(dayDT.dayOfWeek.get - 1)
 
     val baseElement = doc.select(".sv-text-portlet-content")
@@ -167,25 +166,12 @@ object FossilenLunchInfoParser extends LunchInfoParser {
       }
     }
 
-    val maybeDayH3 = baseElement.select("h3:containsOwn(" + weekday + ")").firstOpt
-
     val maybeLunches =
       for {
         _     <- maybeCorrectWeek
-        dayH3 <- maybeDayH3
+        dayH3 <- baseElement.select("h3:containsOwn(" + weekday + ")").firstOpt
       } yield {
         val next = Option(dayH3.nextElementSibling)
-
-        /*
-        This has to be thought out a little better
-        def splitByCapitalLetters(text: String): List[String] = {
-          if (text == null || text.length == 0) List()
-          else {
-            val capitalLetterPart = text.take(1) + text.drop(1).takeWhile(!_.isUpper)
-            capitalLetterPart :: splitByCapitalLetters(text.drop(capitalLetterPart.length))
-          }
-        }
-        */
 
         def getMeals(nextElem: Option[Element]): List[Meal] = nextElem match {
           case None => Nil
