@@ -24,6 +24,7 @@ import org.junit.runner._
 import play.api.libs.ws.WSResponse
 import play.api.test.{PlaySpecification, WithApplication}
 import scala.concurrent.Future
+import LunchInfoParser._
 
 @RunWith(classOf[JUnitRunner])
 class LunchInfoFetcherSpec extends PlaySpecification with Mockito {
@@ -40,8 +41,6 @@ class LunchInfoFetcherSpec extends PlaySpecification with Mockito {
     }
 
     "Fetch and parse information about todays lunches" in new WithApplication {
-      import LunchInfoParser._
-
       val lunchInfoFetcher = new LunchInfoFetcher {
         override def fetchUrl(url: String, requestHeaders: Option[Map[String, String]], timeoutSec: Int): Future[WSResponse] = {
           val html = url match {
@@ -72,8 +71,6 @@ class LunchInfoFetcherSpec extends PlaySpecification with Mockito {
     }
 
     "Handle parsing failures using Try's" in new WithApplication {
-      import LunchInfoParser._
-
       val lunchInfoFetcher = new LunchInfoFetcher {
         override def fetchUrl(url: String, requestHeaders: Option[Map[String, String]], timeoutSec: Int): Future[WSResponse] = {
           val wsResp = mock[WSResponse]
@@ -94,8 +91,6 @@ class LunchInfoFetcherSpec extends PlaySpecification with Mockito {
     }
 
     "Handle fetch failures using Try's" in new WithApplication {
-      import LunchInfoParser._
-
       val lunchInfoFetcher = new LunchInfoFetcher {
         override def fetchUrl(url: String, requestHeaders: Option[Map[String, String]], timeoutSec: Int): Future[WSResponse] = {
           Future.failed(new Exception("Something went wrong"))
