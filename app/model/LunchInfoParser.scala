@@ -22,6 +22,7 @@ import nodes.Element
 import org.joda.time.DateTime
 import common.JsoupExtensions._
 import common.StringExtensions._
+import scala.reflect.runtime._
 
 object LunchInfoParser {
 
@@ -29,8 +30,6 @@ object LunchInfoParser {
    * A map with all LunchInfoParsers mapped to their corresponding name
    */
   lazy val allParsers: Map[String, LunchInfoParser] = {
-    import scala.reflect.runtime._
-
     val lunchInfoParserClass = classOf[LunchInfoParser]
     val rootMirror = universe.runtimeMirror(lunchInfoParserClass.getClassLoader)
     val lunchInfoParserClassSymbol = rootMirror.classSymbol(lunchInfoParserClass)
@@ -109,8 +108,8 @@ object LantisLunchInfoParser extends LunchInfoParser {
       } yield {
         val types = List("Svenska smaker", "World food", "Healthy")
 
-        lunchmenulist.select(".row .text-left").zip(types).map { elem =>
-          Meal(elem._2 + ": " + elem._1.text)
+        lunchmenulist.select(".row .text-left").zip(types).map { case (elem, typ) =>
+          Meal(s"$typ: ${elem.text}")
         }
       }
 

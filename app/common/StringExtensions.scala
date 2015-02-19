@@ -1,5 +1,7 @@
 package common
 
+import scala.util.control.NonFatal
+
 object StringExtensions {
 
   implicit class StringOps(val s: String) extends AnyVal {
@@ -9,7 +11,7 @@ object StringExtensions {
         Some(s.toInt)
       }
       catch {
-        case e: Exception => None
+        case NonFatal(e) => None
       }
     }
 

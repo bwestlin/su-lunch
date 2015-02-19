@@ -26,8 +26,7 @@ case class Restaurant(id: Int,
                       name: String,
                       url: String,
                       requestHeaders: Option[Map[String, String]],
-                      parser: String) {
-}
+                      parser: String)
 
 object Restaurant {
 

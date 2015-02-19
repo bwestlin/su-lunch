@@ -20,14 +20,12 @@ import org.joda.time.{Period, DateTime}
 import org.specs2.mutable._
 import org.specs2.runner._
 import org.junit.runner._
-import scala.xml._
+import KraftanFixtures._
 
 @RunWith(classOf[JUnitRunner])
 class KraftanLunchInfoParserSpec extends Specification {
 
   "KraftanLunchInfoParser" should {
-    import KraftanFixtures._
-
     val parser = KraftanLunchInfoParser
 
     val weekdays = Seq("mon", "tue", "wed", "thu", "fri")

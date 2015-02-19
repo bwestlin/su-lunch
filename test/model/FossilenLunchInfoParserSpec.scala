@@ -20,14 +20,12 @@ import org.joda.time.{Period, DateTime}
 import org.specs2.mutable._
 import org.specs2.runner._
 import org.junit.runner._
-import scala.xml._
+import FossilenFixtures._
 
 @RunWith(classOf[JUnitRunner])
 class FossilenLunchInfoParserSpec extends Specification {
 
   "FossilenLunchInfoParser" should {
-    import FossilenFixtures._
-
     val parser = FossilenLunchInfoParser
 
     val weekdays = Seq("mon", "tue", "wed", "thu", "fri", "sunsat", "sunsat")

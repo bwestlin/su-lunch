@@ -16,5 +16,4 @@
 
 package model
 
-case class Meal(description: String) {
-}
+case class Meal(description: String)

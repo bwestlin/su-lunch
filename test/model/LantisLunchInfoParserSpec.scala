@@ -20,13 +20,12 @@ import org.joda.time.DateTime
 import org.specs2.mutable._
 import org.specs2.runner._
 import org.junit.runner._
-import scala.xml._
+import LantisFixtures._
 
 @RunWith(classOf[JUnitRunner])
 class LantisLunchInfoParserSpec extends Specification {
 
   "LantisLunchInfoParser" should {
-    import LantisFixtures._
     // TODO Test for different date cases like months 1-9, 10-12, all weekdays etc.
 
     val parser = LantisLunchInfoParser
