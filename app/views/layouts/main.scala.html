@@ -84,5 +84,10 @@
     ga('create', 'UA-35840224-1', 'auto');
     ga('send', 'pageview');
     </script>
+    <!--
+      BuildInfo:
+      @buildinfo.BuildInfo.toMap.toSeq.sortBy(_._1).map { case (name, value) =>
+        @name: @value }
+    -->
   </body>
 </html>
