@@ -1,6 +1,6 @@
 package model
 
-object BiofoodFixtures {
+trait BiofoodFixtures {
 
   def html(mealNames: Seq[String]) =
     <div class="col-md-3 hors-menu text-center">
@@ -19,7 +19,9 @@ object BiofoodFixtures {
   def defaultMealNames(nMeals: Int) = (1 to nMeals).map("Meal" + _)
 }
 
-object FossilenFixtures {
+object BiofoodFixtures extends BiofoodFixtures
+
+trait FossilenFixtures {
 
   def html(mealName: String = "meal") =
     <div class="sv-text-portlet-content">
@@ -59,7 +61,9 @@ object FossilenFixtures {
     </div>
 }
 
-object KraftanFixtures {
+object FossilenFixtures extends FossilenFixtures
+
+trait KraftanFixtures {
 
   def html(mealName: String = "meal") =
     <div class="post-content no-thumbnail">
@@ -110,7 +114,9 @@ object KraftanFixtures {
     </div>
 }
 
-object LantisFixtures {
+object KraftanFixtures extends KraftanFixtures
+
+trait LantisFixtures {
 
   def html(mealNames: Seq[String]) =
     <div class="col-md-3 hors-menu text-center">
@@ -128,3 +134,5 @@ object LantisFixtures {
 
   def defaultMealNames(nMeals: Int) = (1 to nMeals).map("Meal" + _)
 }
+
+object LantisFixtures extends LantisFixtures

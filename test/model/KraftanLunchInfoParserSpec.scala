@@ -20,10 +20,9 @@ import org.joda.time.{Period, DateTime}
 import org.specs2.mutable._
 import org.specs2.runner._
 import org.junit.runner._
-import KraftanFixtures._
 
 @RunWith(classOf[JUnitRunner])
-class KraftanLunchInfoParserSpec extends Specification {
+class KraftanLunchInfoParserSpec extends Specification with KraftanFixtures {
 
   "KraftanLunchInfoParser" should {
     val parser = KraftanLunchInfoParser

@@ -20,10 +20,9 @@ import org.joda.time.{Period, DateTime}
 import org.specs2.mutable._
 import org.specs2.runner._
 import org.junit.runner._
-import FossilenFixtures._
 
 @RunWith(classOf[JUnitRunner])
-class FossilenLunchInfoParserSpec extends Specification {
+class FossilenLunchInfoParserSpec extends Specification with FossilenFixtures {
 
   "FossilenLunchInfoParser" should {
     val parser = FossilenLunchInfoParser

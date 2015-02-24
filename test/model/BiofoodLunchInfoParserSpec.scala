@@ -20,10 +20,9 @@ import org.joda.time.DateTime
 import org.junit.runner._
 import org.specs2.mutable._
 import org.specs2.runner._
-import BiofoodFixtures._
 
 @RunWith(classOf[JUnitRunner])
-class BiofoodLunchInfoParserSpec extends Specification {
+class BiofoodLunchInfoParserSpec extends Specification with BiofoodFixtures {
 
   "BiofoodLunchInfoParser" should {
     // TODO Test for different date cases like months 1-9, 10-12, all weekdays etc.
