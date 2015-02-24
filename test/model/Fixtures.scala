@@ -6,12 +6,12 @@ object BiofoodFixtures {
     <div class="col-md-3 hors-menu text-center">
       <h2 id="tillmenyn">Dagens lunch Mån. 10/11</h2>
       {
-      mealNames.map { name =>
-        <div class="row">
-          <div class="col-xs-2"></div>
-          <div class="col-xs-10 text-left">{name}</div>
-        </div>
-      }
+        mealNames.map { name =>
+          <div class="row">
+            <div class="col-xs-2"></div>
+            <div class="col-xs-10 text-left">{name}</div>
+          </div>
+        }
       }
       <p class="small"></p>
     </div>
@@ -116,12 +116,12 @@ object LantisFixtures {
     <div class="col-md-3 hors-menu text-center">
       <h2 id="tillmenyn">Dagens lunch Mån. 10/11</h2>
       {
-      mealNames.map { name =>
-        <div class="row">
-          <div class="col-xs-2"></div>
-          <div class="col-xs-10 text-left">{name}</div>
-        </div>
-      }
+        mealNames.map { name =>
+          <div class="row">
+            <div class="col-xs-2"></div>
+            <div class="col-xs-10 text-left">{name}</div>
+          </div>
+        }
       }
       <p class="small"></p>
     </div>
