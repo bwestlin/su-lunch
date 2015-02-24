@@ -1,4 +1,5 @@
 import PlayKeys._
+import org.joda.time.DateTime, org.joda.time.format.DateTimeFormat
 
 name := "su-lunch"
 
@@ -10,7 +11,7 @@ libraryDependencies ++= Seq(
   ws,
   cache,
   "org.jsoup"   %   "jsoup"           % "1.7.2" withSources,
-  "joda-time"   %   "joda-time"       % "2.1" withSources,
+  "joda-time"   %   "joda-time"       % "2.3" withSources,
   "org.webjars" %%  "webjars-play"    % "2.3.0" withSources,
   "org.webjars" %   "jquery"          % "1.10.2",
   "org.webjars" %   "bootstrap"       % "2.3.2",
@@ -26,3 +27,16 @@ TwirlKeys.templateImports ++= Seq(
 
 ScoverageSbtPlugin.ScoverageKeys.coverageExcludedPackages := "<empty>;Global;Routes;controllers.Reverse*;controllers.javascript.*;controllers.ref.*"
 
+buildInfoSettings
+
+sourceGenerators in Compile <+= buildInfo
+
+buildInfoKeys := Seq[BuildInfoKey](
+  name,
+  version,
+  scalaVersion,
+  sbtVersion,
+  "gitBranch" -> "git rev-parse --abbrev-ref HEAD".!!.trim,
+  "gitRevision" -> "git rev-parse HEAD".!!.trim,
+  "buildTime" ->  DateTimeFormat.forPattern("E, yyyy-MM-dd HH:mm:ss Z").print(new DateTime())
+)
