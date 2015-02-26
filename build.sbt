@@ -1,5 +1,6 @@
 import PlayKeys._
 import org.joda.time.DateTime, org.joda.time.format.DateTimeFormat
+import scala.util.Try
 
 name := "su-lunch"
 
@@ -36,7 +37,13 @@ buildInfoKeys := Seq[BuildInfoKey](
   version,
   scalaVersion,
   sbtVersion,
-  "gitBranch" -> "git rev-parse --abbrev-ref HEAD".!!.trim,
-  "gitRevision" -> "git rev-parse HEAD".!!.trim,
-  "buildTime" ->  DateTimeFormat.forPattern("E, yyyy-MM-dd HH:mm:ss Z").print(new DateTime())
+  "gitBranch" -> gitBranch,
+  "gitRevision" -> gitRevision,
+  "buildTime" -> buildTime
 )
+
+def gitBranch = Try("git rev-parse --abbrev-ref HEAD".!!.trim).getOrElse("?")
+
+def gitRevision = Try("git rev-parse HEAD".!!.trim).getOrElse("?")
+
+def buildTime = DateTimeFormat.forPattern("E, yyyy-MM-dd HH:mm:ss Z").print(new DateTime())
