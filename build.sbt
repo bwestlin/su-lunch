@@ -54,4 +54,4 @@ def gitCommit = getEnv("TRAVIS_COMMIT") getOrElse Try("git rev-parse HEAD".!!.tr
 
 def buildTime = DateTimeFormat.forPattern("E, yyyy-MM-dd HH:mm:ss Z").print(new DateTime())
 
-def buildHost = Try(InetAddress.getLocalHost.getCanonicalHostName).getOrElse("?")
+def buildHost = Try("hostname --fqdn".!!.trim) orElse Try(InetAddress.getLocalHost.getCanonicalHostName) getOrElse "?"
