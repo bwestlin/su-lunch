@@ -1,6 +1,7 @@
 import PlayKeys._
 import org.joda.time.DateTime, org.joda.time.format.DateTimeFormat
 import scala.util.Try
+import java.net.InetAddress
 
 name := "su-lunch"
 
@@ -40,12 +41,15 @@ buildInfoKeys := Seq[BuildInfoKey](
   scalaVersion,
   sbtVersion,
   "gitBranch" -> gitBranch,
-  "gitRevision" -> gitRevision,
-  "buildTime" -> buildTime
+  "gitCommit" -> gitCommit,
+  "buildTime" -> buildTime,
+  "buildHost" -> buildHost
 )
 
-def gitBranch = Try("git rev-parse --abbrev-ref HEAD".!!.trim).getOrElse("?")
+def gitBranch = Try("git symbolic-ref --short HEAD".!!.trim).getOrElse("?")
 
-def gitRevision = Try("git rev-parse HEAD".!!.trim).getOrElse("?")
+def gitCommit = Try("git rev-parse HEAD".!!.trim).getOrElse("?")
 
 def buildTime = DateTimeFormat.forPattern("E, yyyy-MM-dd HH:mm:ss Z").print(new DateTime())
+
+def buildHost = Try(InetAddress.getLocalHost().getHostName()).getOrElse("?")
