@@ -4,6 +4,8 @@ import scala.util.Try
 
 name := "su-lunch"
 
+herokuAppName in Compile := "su-lunch"
+
 version := "1.0-SNAPSHOT"
 
 scalaVersion := "2.11.4"

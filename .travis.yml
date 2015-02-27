@@ -6,9 +6,7 @@ scala:
 branches:
   only:
     - master
-script: "sbt clean coverage test"
+script:
+  - "sbt clean coverage test coveralls coverageReport coverageAggregate codacyCoverage"
 after_success:
-  - "sbt coveralls"
-  - "sbt coverageReport"
-  - "sbt coverageAggregate"
-  - "sbt codacyCoverage"
+  - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && sbt stage deployHeroku || false'
