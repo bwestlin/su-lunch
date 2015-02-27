@@ -40,12 +40,12 @@ buildInfoKeys := Seq[BuildInfoKey](
   scalaVersion,
   sbtVersion,
   "gitBranch" -> gitBranch,
-  "gitRevision" -> gitRevision,
+  "gitCommit" -> gitCommit,
   "buildTime" -> buildTime
 )
 
-def gitBranch = Try("git rev-parse --abbrev-ref HEAD".!!.trim).getOrElse("?")
+def gitBranch = Try("git symbolic-ref --short HEAD".!!.trim).getOrElse("?")
 
-def gitRevision = Try("git rev-parse HEAD".!!.trim).getOrElse("?")
+def gitCommit = Try("git rev-parse HEAD".!!.trim).getOrElse("?")
 
 def buildTime = DateTimeFormat.forPattern("E, yyyy-MM-dd HH:mm:ss Z").print(new DateTime())
