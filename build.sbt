@@ -48,10 +48,10 @@ buildInfoKeys := Seq[BuildInfoKey](
 
 def getEnv(name: String) = Option(System.getenv(name)).filterNot(_.isEmpty)
 
-def gitBranch = getEnv("TRAVIS_BRANCH") getOrElse Try("git rev-parse --abbrev-ref HEAD".!!.trim).getOrElse("?")
+def gitBranch = getEnv("TRAVIS_BRANCH") orElse Try("git rev-parse --abbrev-ref HEAD".!!.trim).toOption getOrElse "?"
 
-def gitCommit = getEnv("TRAVIS_COMMIT") getOrElse Try("git rev-parse HEAD".!!.trim).getOrElse("?")
+def gitCommit = getEnv("TRAVIS_COMMIT") orElse Try("git rev-parse HEAD".!!.trim).toOption getOrElse "?"
 
 def buildTime = DateTimeFormat.forPattern("E, yyyy-MM-dd HH:mm:ss Z").print(new DateTime())
 
-def buildHost = Try("hostname --fqdn".!!.trim) orElse Try(InetAddress.getLocalHost.getCanonicalHostName) getOrElse "?"
+def buildHost = Try("hostname --fqdn".!!.trim) orElse Try(InetAddress.getLocalHost.getHostName) getOrElse "?"
