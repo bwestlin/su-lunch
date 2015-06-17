@@ -47,5 +47,10 @@ class BiofoodLunchInfoParserSpec extends Specification with BiofoodFixtures {
       parser(dt, html(Seq("Måndag")).toString()) must throwAn("otillförlitligt resultat")
       parser(dt, html(Seq("måndag")).toString()) must throwAn("otillförlitligt resultat")
     }
+
+    "Skip ureasonable meals" in {
+      val dt = DateTime.parse("2014-11-10T12.00")
+      parser(dt, html(Seq("---")).toString()) must beEmpty
+    }
   }
 }

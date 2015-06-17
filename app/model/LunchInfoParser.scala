@@ -69,7 +69,10 @@ object LunchInfoParser {
 sealed abstract class LunchInfoParser {
 
   def apply(day: DateTime, body: String): Seq[Meal] = {
-    val meals = parse(day, body)
+    def resonableMealdescriptionPredicate(meal: Meal) =
+      meal.description.length > 2 && meal.description.exists(Character.isLetter)
+
+    val meals = parse(day, body).filter(resonableMealdescriptionPredicate)
 
     if (Option(meals).nonEmpty && isMealResultUnreasonable(meals))
       throw new Exception("Inhämtningen gav ett otillförlitligt resultat")
