@@ -209,9 +209,8 @@ object KraftanLunchInfoParser extends LunchInfoParser {
     val maybeMeals =
       for {
         weekTitleElem     <- doc.select(s"h2:contains(v.$weekNum)").firstOpt orElse doc.select(s"em:contains(V.$weekNum)").firstOpt
-        weekdaysContainer <- weekTitleElem.parent.parent.select(s"p:contains(${weekdays.head})").firstOpt.map(_.parent)
-        weekDayElem       <- weekdaysContainer.select(s"p:contains($weekday)").firstOpt
-        mealsForDay       <- Option(weekDayElem.nextElementSiblings(3).map(_.text).filterNot(_ == "**"))
+        weekdaysContainer <- weekTitleElem.parent.parent.select(s":containsOwn(${weekdays.head})").firstOpt
+        mealsForDay       <- Option(weekdaysContainer.textNodes.map(_.text.trimWhitespace).dropWhile(_ != weekday).drop(1).take(3).filterNot(_ == "**"))
       } yield {
         mealsForDay.map(Meal.apply)
       }

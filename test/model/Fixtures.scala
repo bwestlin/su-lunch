@@ -77,32 +77,32 @@ trait KraftanFixtures {
       </div>
       <div class="clear"></div>
       <div class="post-content-content">
-        <p><em>Måndag</em></p>
-        <p><em>mon-{mealName}1</em></p>
-        <p><em>**</em></p>
-        <p><em>mon-{mealName}2</em></p>
-        <p><em>&nbsp;</em></p>
-        <p><em>Tisdag </em></p>
-        <p><em>tue-{mealName}1</em></p>
-        <p><em>**</em></p>
-        <p><em>tue-{mealName}2</em></p>
-        <p><em>&nbsp;</em></p>
-        <p><em>Onsdag</em></p>
-        <p><em>wed-{mealName}1</em></p>
-        <p><em>**</em></p>
-        <p><em>wed-{mealName}2</em></p>
-        <p><em>&nbsp;</em></p>
-        <p><em>Torsdag</em></p>
-        <p><em>thu-{mealName}1</em></p>
-        <p><em>**</em></p>
-        <p><em>thu-{mealName}2</em></p>
-        <p><em>&nbsp;</em></p>
-        <p><em>&nbsp;</em><em>Fredag</em></p>
-        <p><em>fri-{mealName}1</em></p>
-        <p><em>**</em></p>
-        <p><em>fri-{mealName}2</em></p>
-        <p><em>&nbsp;</em></p>
-        <p><em>foo bar</em></p>
+        Måndag<br/>
+        mon-{mealName}1<br/>
+        **<br/>
+        mon-{mealName}2<br/>
+        &nbsp;<br/>
+        Tisdag <br/>
+        tue-{mealName}1<br/>
+        **<br/>
+        tue-{mealName}2<br/>
+        &nbsp;<br/>
+        Onsdag<br/>
+        wed-{mealName}1<br/>
+        **<br/>
+        wed-{mealName}2<br/>
+        &nbsp;<br/>
+        Torsdag<br/>
+        thu-{mealName}1<br/>
+        **<br/>
+        thu-{mealName}2<br/>
+        &nbsp;<br/>
+        &nbsp;Fredag<br/>
+        fri-{mealName}1<br/>
+        **<br/>
+        fri-{mealName}2<br/>
+        &nbsp;<br/>
+        foo bar<br/>
         <div class="clear"></div>
         <div class="post-info bottom">
           <span class="post-type-icon-wrap"><span class="post-type-icon"></span></span>
