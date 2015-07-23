@@ -7,6 +7,6 @@ branches:
   only:
     - master
 script:
-  - "sbt clean coverage test coveralls coverageReport coverageAggregate codacyCoverage"
+  - "./activator clean coverage test coveralls coverageReport coverageAggregate codacyCoverage"
 after_success:
-  - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && sbt stage deployHeroku || false'
+  - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && ./activator stage deployHeroku || false'
